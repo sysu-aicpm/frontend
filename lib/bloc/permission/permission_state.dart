@@ -13,7 +13,7 @@ class PermissionInitial extends PermissionState {}
 class PermissionLoadInProgress extends PermissionState {}
 
 class PermissionLoadSuccess extends PermissionState {
-  final List<Permission> permissions;
+  final List<UserPermission> permissions;
 
   const PermissionLoadSuccess(this.permissions);
 

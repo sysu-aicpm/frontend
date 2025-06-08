@@ -67,7 +67,7 @@ class DeviceDetailsPage extends StatelessWidget {
                 // Permissions Section
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Text('Shared With', style: Theme.of(context).textTheme.headline6),
+                  child: Text('Shared With', style: Theme.of(context).textTheme.titleLarge),
                 ),
                 Expanded(child: _buildPermissionsList(context, state)),
               ],
