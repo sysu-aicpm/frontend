@@ -18,14 +18,19 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     emit(DeviceLoadInProgress());
     try {
       final response = await _apiClient.getDevices();
-      final devices = (response.data as List)
-          .map((deviceJson) => Device(
-                id: deviceJson['id'],
-                name: deviceJson['name'],
-                type: deviceJson['type'],
-                isOnline: deviceJson['isOnline'],
-              ))
-          .toList();
+      final devices = List<Device>.from(response.data['results']
+        .map(
+          (deviceJson) => Device(
+            id: deviceJson['id']?.toString() ?? 'Unknown ID',
+            name: deviceJson['name'] ?? 'Unknown Name',
+            type: deviceJson['device_type'] ?? 'Unknown Type',
+            isOnline: (deviceJson['status'] ?? 'offline') == 'online',
+          )
+        )
+        .toList()
+        .where((device) => device != null)
+      );
+      
       emit(DeviceLoadSuccess(devices: devices));
     } catch (e) {
       emit(const DeviceLoadFailure(error: 'Failed to load devices.'));

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:smart_home_app/config/env.dart';
 import 'package:smart_home_app/utils/secure_storage.dart';
 
 class ApiClient {
@@ -6,7 +7,7 @@ class ApiClient {
   final SecureStorage _secureStorage;
 
   ApiClient(this._secureStorage)
-      : _dio = Dio(BaseOptions(baseUrl: 'https://api.example.com')) {
+      : _dio = Dio(BaseOptions(baseUrl: Env.apiUrl)) {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
@@ -23,9 +24,9 @@ class ApiClient {
   Dio get dio => _dio;
 
   // Example login method
-  Future<Response> login(String username, String password) {
+  Future<Response> login(String email, String password) {
     return _dio.post('/auth/login/', data: {
-      'username': username,
+      'email': email,
       'password': password,
     });
   }

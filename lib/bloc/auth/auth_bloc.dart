@@ -51,10 +51,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await _secureStorage.saveToken(token);
 
       // Then, get user info with the new token
-      final userInfoResponse = await _apiClient.getUserInfo();
+      final userInfoResponse = await _apiClient.getUserInfo();      
       final user = User(
-        id: userInfoResponse.data['id'].toString(),
-        username: userInfoResponse.data['username'],
+        id: userInfoResponse.data['data']['id'].toString(),
+        username: userInfoResponse.data['data']['username'],
       );
       emit(Authenticated(user: user));
     } catch (e) {
