@@ -1,21 +1,7 @@
-
 # smart_home_app
 
-A new Flutter project.
+开发时，通过如下方式指定后端 API：
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-# frontend
-用于存放前端代码
-
+```shell
+flutter run --dart-define=API_URL=http://172.18.198.206/api/v1
+```
