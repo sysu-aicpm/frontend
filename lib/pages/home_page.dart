@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home_app/api/api_client.dart';
-import 'package:smart_home_app/bloc/auth/auth_bloc.dart';
-import 'package:smart_home_app/bloc/auth/auth_event.dart';
-import 'package:smart_home_app/bloc/device/device_bloc.dart';
-import 'package:smart_home_app/bloc/device/device_event.dart';
-import 'package:smart_home_app/bloc/device/device_state.dart';
+import 'package:smart_home_app/bloc/auth/bloc.dart';
+import 'package:smart_home_app/bloc/auth/event.dart';
+import 'package:smart_home_app/bloc/device_overview/bloc.dart';
+import 'package:smart_home_app/bloc/device_overview/event.dart';
+import 'package:smart_home_app/bloc/device_overview/state.dart';
 import 'package:smart_home_app/pages/device_details_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -14,12 +14,12 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => DeviceBloc(
+      create: (context) => DeviceOverviewBloc(
         // We can get the ApiClient from the repository provider
         // but for simplicity, we create a new one.
         // In a real app, you should use RepositoryProvider to provide ApiClient.
         RepositoryProvider.of<ApiClient>(context),
-      )..add(LoadDevices()),
+      )..add(LoadDevicesOverview()),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('My Devices'),
@@ -33,12 +33,12 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-        body: BlocBuilder<DeviceBloc, DeviceState>(
+        body: BlocBuilder<DeviceOverviewBloc, DeviceOverviewState>(
           builder: (context, state) {
-            if (state is DeviceLoadInProgress) {
+            if (state is DeviceOverviewInProgress) {
               return const Center(child: CircularProgressIndicator());
             }
-            if (state is DeviceLoadSuccess) {
+            if (state is DeviceOverviewSuccess) {
               final devices = state.devices;
               if (devices.isEmpty) {
                 return const Center(child: Text('No devices found.'));
@@ -49,7 +49,7 @@ class HomePage extends StatelessWidget {
                   final device = devices[index];
                   return ListTile(
                     title: Text(device.name),
-                    subtitle: Text(device.type),
+                    subtitle: Text(device.type.name),
                     trailing: Icon(
                       Icons.circle,
                       color: device.isOnline ? Colors.green : Colors.red,
@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => DeviceDetailsPage(device: device),
+                          builder: (_) => DeviceDetailPage(device: device),
                         ),
                       );
                     },
@@ -65,7 +65,7 @@ class HomePage extends StatelessWidget {
                 },
               );
             }
-            if (state is DeviceLoadFailure) {
+            if (state is DeviceOverviewFailure) {
               return Center(child: Text(state.error));
             }
             return const Center(child: Text('Something went wrong.'));

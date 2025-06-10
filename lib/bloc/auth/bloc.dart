@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home_app/api/api_client.dart';
 import 'package:smart_home_app/api/models/user.dart';
-import 'package:smart_home_app/bloc/auth/auth_event.dart';
-import 'package:smart_home_app/bloc/auth/auth_state.dart';
+import 'package:smart_home_app/bloc/auth/event.dart';
+import 'package:smart_home_app/bloc/auth/state.dart';
 import 'package:smart_home_app/utils/secure_storage.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -26,8 +26,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       try {
         final userInfoResponse = await _apiClient.getUserInfo();
         final user = User(
-          id: userInfoResponse.data['id'].toString(),
-          username: userInfoResponse.data['username'],
+          id: userInfoResponse.data['data']['id'].toString(),
+          username: userInfoResponse.data['data']['username'],
         );
         emit(Authenticated(user: user));
       } catch (e) {
@@ -59,7 +59,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
       emit(Authenticated(user: user));
     } catch (e) {
-      emit(const AuthFailure(error: 'Login Failed. Please check your credentials.'));
+      emit(AuthFailure(error: 'Login Failed. Please check your credentials. $e'));
     }
   }
 

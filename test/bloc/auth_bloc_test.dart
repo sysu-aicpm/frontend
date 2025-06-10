@@ -4,9 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:smart_home_app/api/api_client.dart';
 import 'package:smart_home_app/api/models/user.dart';
-import 'package:smart_home_app/bloc/auth/auth_bloc.dart';
-import 'package:smart_home_app/bloc/auth/auth_event.dart';
-import 'package:smart_home_app/bloc/auth/auth_state.dart';
+import 'package:smart_home_app/bloc/auth/bloc.dart';
+import 'package:smart_home_app/bloc/auth/event.dart';
+import 'package:smart_home_app/bloc/auth/state.dart';
 import 'package:smart_home_app/utils/secure_storage.dart';
 
 // Mocks
@@ -51,7 +51,7 @@ void main() {
         when(() => mockApiClient.getUserInfo()).thenAnswer((_) async => tUserInfoResponse);
         return authBloc;
       },
-      act: (bloc) => bloc.add(const LoginRequested(username: 'test', password: 'password')),
+      act: (bloc) => bloc.add(const LoginRequested(email: 'test', password: 'password')),
       expect: () => [
         AuthLoading(),
         const Authenticated(user: tUser),
@@ -68,7 +68,7 @@ void main() {
         when(() => mockApiClient.login(any(), any())).thenThrow(Exception('Login Failed'));
         return authBloc;
       },
-      act: (bloc) => bloc.add(const LoginRequested(username: 'test', password: 'password')),
+      act: (bloc) => bloc.add(const LoginRequested(email: 'test', password: 'password')),
       expect: () => [
         AuthLoading(),
         const AuthFailure(error: 'Login Failed. Please check your credentials.'),
