@@ -46,7 +46,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading());
     try {
       // First, get the token
-      final loginResponse = await _apiClient.login(event.username, event.password);
+      final loginResponse = await _apiClient.login(event.email, event.password);
       final String token = loginResponse.data['access'];
       await _secureStorage.saveToken(token);
 

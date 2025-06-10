@@ -1,9 +1,11 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home_app/bloc/auth/bloc.dart';
 import 'package:smart_home_app/bloc/auth/event.dart';
 import 'package:smart_home_app/bloc/auth/state.dart';
 import 'package:smart_home_app/pages/home_page.dart';
+import 'package:smart_home_app/pages/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,15 +15,17 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    print('LOGIN_PAGE: Build method called.');
     return Scaffold(
       appBar: AppBar(title: const Text('Login')),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
+          print('LOGIN_PAGE_LISTENER: State is ${state.runtimeType}');
           if (state is AuthFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.error)),
@@ -34,15 +38,16 @@ class _LoginPageState extends State<LoginPage> {
           }
         },
         builder: (context, state) {
+          print('LOGIN_PAGE_BUILDER: State is ${state.runtimeType}');
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextField(
-                  controller: _usernameController,
-                  key: const ValueKey('username_field'),
-                  decoration: const InputDecoration(labelText: 'Username'),
+                  controller: _emailController,
+                  key: const ValueKey('email_field'),
+                  decoration: const InputDecoration(labelText: 'Email'),
                 ),
                 const SizedBox(height: 16),
                 TextField(
@@ -59,13 +64,35 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       context.read<AuthBloc>().add(
                             LoginRequested(
-                              username: _usernameController.text,
+                              email: _emailController.text,
                               password: _passwordController.text,
                             ),
                           );
                     },
                     child: const Text('Login'),
                   ),
+                const SizedBox(height: 16),
+                RichText(
+                  text: TextSpan(
+                    text: "Don't have an account? ",
+                    style: DefaultTextStyle.of(context).style,
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: 'Register',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => const RegisterPage()),
+                            );
+                          },
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           );
@@ -76,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }

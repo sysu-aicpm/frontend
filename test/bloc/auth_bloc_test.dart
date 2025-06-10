@@ -51,7 +51,7 @@ void main() {
         when(() => mockApiClient.getUserInfo()).thenAnswer((_) async => tUserInfoResponse);
         return authBloc;
       },
-      act: (bloc) => bloc.add(const LoginRequested(username: 'test', password: 'password')),
+      act: (bloc) => bloc.add(const LoginRequested(email: 'test', password: 'password')),
       expect: () => [
         AuthLoading(),
         const Authenticated(user: tUser),
@@ -68,7 +68,7 @@ void main() {
         when(() => mockApiClient.login(any(), any())).thenThrow(Exception('Login Failed'));
         return authBloc;
       },
-      act: (bloc) => bloc.add(const LoginRequested(username: 'test', password: 'password')),
+      act: (bloc) => bloc.add(const LoginRequested(email: 'test', password: 'password')),
       expect: () => [
         AuthLoading(),
         const AuthFailure(error: 'Login Failed. Please check your credentials.'),

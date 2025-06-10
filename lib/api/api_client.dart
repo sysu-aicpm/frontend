@@ -31,6 +31,13 @@ class ApiClient {
     });
   }
 
+  Future<Response> register(String email, String password) {
+    return _dio.post('/auth/register/', data: {
+      'email': email,
+      'password': password,
+    });
+  }
+
   // Get current user's info
   Future<Response> getUserInfo() {
     return _dio.get('/auth/me/');

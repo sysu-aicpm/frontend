@@ -37,7 +37,7 @@ void main() {
     
     // Provide a default state for auth
     when(() => mockAuthBloc.state).thenReturn(Unauthenticated());
-    registerFallbackValue(const LoginRequested(username: '', password: ''));
+    registerFallbackValue(const LoginRequested(email: '', password: ''));
   });
 
   const tUser = User(id: '1', username: 'test');
@@ -62,7 +62,7 @@ void main() {
       await tester.pumpWidget(
         BlocProvider<AuthBloc>.value(
           value: mockAuthBloc,
-          child: const MaterialApp(home: AppNavigator()),
+          child: const MaterialApp(home: MyApp()),
         ),
       );
 
@@ -73,7 +73,7 @@ void main() {
       when(() => mockAuthBloc.state).thenReturn(const Authenticated(user: tUser));
       when(() => mockDeviceBloc.state).thenReturn(DeviceOverviewInitial());
 
-      await tester.pumpWidget(createTestableWidget(const AppNavigator()));
+      await tester.pumpWidget(createTestableWidget(const MyApp()));
       
       await tester.pump();
 
@@ -87,7 +87,7 @@ void main() {
       await tester.enterText(find.byKey(const ValueKey('password_field')), 'pass');
       await tester.tap(find.byType(ElevatedButton));
       
-      verify(() => mockAuthBloc.add(const LoginRequested(username: 'user', password: 'pass'))).called(1);
+      verify(() => mockAuthBloc.add(const LoginRequested(email: 'user', password: 'pass'))).called(1);
     });
   });
 

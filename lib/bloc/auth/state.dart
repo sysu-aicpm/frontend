@@ -23,6 +23,8 @@ class Authenticated extends AuthState {
 
 class Unauthenticated extends AuthState {}
 
+class RegistrationSuccessful extends AuthState {}
+
 class AuthFailure extends AuthState {
   final String error;
 
