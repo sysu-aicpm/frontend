@@ -4,9 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:smart_home_app/api/api_client.dart';
 import 'package:smart_home_app/api/models/user.dart';
-import 'package:smart_home_app/bloc/auth/auth_bloc.dart';
-import 'package:smart_home_app/bloc/auth/auth_event.dart';
-import 'package:smart_home_app/bloc/auth/auth_state.dart';
+import 'package:smart_home_app/bloc/auth/bloc.dart';
+import 'package:smart_home_app/bloc/auth/event.dart';
+import 'package:smart_home_app/bloc/auth/state.dart';
 import 'package:smart_home_app/utils/secure_storage.dart';
 
 // Mocks

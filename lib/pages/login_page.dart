@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home_app/bloc/auth/auth_bloc.dart';
-import 'package:smart_home_app/bloc/auth/auth_event.dart';
-import 'package:smart_home_app/bloc/auth/auth_state.dart';
+import 'package:smart_home_app/bloc/auth/bloc.dart';
+import 'package:smart_home_app/bloc/auth/event.dart';
+import 'package:smart_home_app/bloc/auth/state.dart';
 import 'package:smart_home_app/pages/home_page.dart';
 
 class LoginPage extends StatefulWidget {
