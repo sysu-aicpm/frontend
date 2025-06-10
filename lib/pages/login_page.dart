@@ -39,6 +39,11 @@ class _LoginPageState extends State<LoginPage> {
         },
         builder: (context, state) {
           print('LOGIN_PAGE_BUILDER: State is ${state.runtimeType}');
+
+          if(state is AuthFailure){
+            print(state.error);
+          }
+
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
