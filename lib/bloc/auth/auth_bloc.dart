@@ -13,6 +13,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthenticationStatusChecked>(_onAuthenticationStatusChecked);
     on<LoginRequested>(_onLoginRequested);
     on<LogoutRequested>(_onLogoutRequested);
+    on<RegisterRequested>(_onRegisterRequested);
   }
 
   Future<void> _onAuthenticationStatusChecked(
@@ -46,7 +47,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading());
     try {
       // First, get the token
-      final loginResponse = await _apiClient.login(event.username, event.password);
+      final loginResponse = await _apiClient.login(event.email, event.password);
       final String token = loginResponse.data['access'];
       await _secureStorage.saveToken(token);
 
@@ -59,6 +60,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(Authenticated(user: user));
     } catch (e) {
       emit(const AuthFailure(error: 'Login Failed. Please check your credentials.'));
+    }
+  }
+
+  Future<void> _onRegisterRequested(
+    RegisterRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    if (event.password != event.confirmPassword) {
+      emit(const AuthFailure(error: 'Passwords do not match.'));
+      emit(AuthInitial());
+      return;
+    }
+    emit(AuthLoading());
+    try {
+      await _apiClient.register(event.email, event.password);
+      emit(RegistrationSuccessful());
+    } catch (e) {
+      emit(const AuthFailure(error: 'Registration Failed. The email might already be in use.'));
+      emit(AuthInitial());
     }
   }
 

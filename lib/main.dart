@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home_app/api/api_client.dart';
+import 'package:smart_home_app/bloc/app_bloc_observer.dart';
 import 'package:smart_home_app/bloc/auth/auth_bloc.dart';
 import 'package:smart_home_app/bloc/auth/auth_event.dart';
 import 'package:smart_home_app/bloc/auth/auth_state.dart';
@@ -9,7 +10,22 @@ import 'package:smart_home_app/pages/login_page.dart';
 import 'package:smart_home_app/utils/secure_storage.dart';
 
 void main() {
-  runApp(const MyApp());
+  Bloc.observer = AppBlocObserver();
+  runApp(
+    RepositoryProvider(
+      create: (context) => SecureStorage(),
+      child: RepositoryProvider(
+        create: (context) => ApiClient(context.read<SecureStorage>()),
+        child: BlocProvider(
+          create: (context) => AuthBloc(
+            context.read<ApiClient>(),
+            context.read<SecureStorage>(),
+          )..add(AuthenticationStatusChecked()),
+          child: const MyApp(),
+        ),
+      ),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,49 +33,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Create instances of the dependencies
-    final SecureStorage secureStorage = SecureStorage();
-    final ApiClient apiClient = ApiClient(secureStorage);
-
-    return RepositoryProvider.value(
-      value: apiClient,
-      child: BlocProvider(
-        create: (context) => AuthBloc(
-          context.read<ApiClient>(),
-          secureStorage,
-        )..add(AuthenticationStatusChecked()),
-        child: MaterialApp(
-          title: 'Smart Home App',
+    return MaterialApp(
+      title: 'Smart Home App',
       theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
-          home: const AppNavigator(),
-        ),
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-    );
-  }
-}
-
-class AppNavigator extends StatelessWidget {
-  const AppNavigator({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
-      builder: (context, state) {
-        if (state is Authenticated) {
-          return const HomePage();
-        }
-        if (state is Unauthenticated || state is AuthFailure) {
+      home: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          if (state is Authenticated) {
+            return const HomePage();
+          }
           return const LoginPage();
-        }
-        // Show a loading screen while checking auth status
-        return const Scaffold(
-      body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
-      },
+        },
+      ),
     );
   }
 }
