@@ -79,14 +79,14 @@ class ApiClient {
     return _dio.put('/device-groups/$deviceGroupId/', data: data);
   }
 
-  Future<Response> addDeviceToDeviceGroup(num groupId, num deviceId) {
-    return _dio.post('/device-groups/$groupId/devices/', data: {
+  Future<Response> addDeviceToDeviceGroup(num deviceGroupId, num deviceId) {
+    return _dio.post('/device-groups/$deviceGroupId/devices/', data: {
       "device_id": deviceId
     });
   }
 
-  Future<Response> rmDeviceFromDeviceGroup(num groupId, num deviceId) {
-    return _dio.delete('/device-groups/$groupId/devices/$deviceId/');
+  Future<Response> rmDeviceFromDeviceGroup(num deviceGroupId, num deviceId) {
+    return _dio.delete('/device-groups/$deviceGroupId/devices/$deviceId/');
   }
 
   // --------- Admin Users ---------
@@ -131,13 +131,27 @@ class ApiClient {
     return _dio.post('/user-groups/$userGroupId/', data: data);
   }
 
-  Future<Response> addUserToUserGroup(num groupId, num userId) {
-    return _dio.post('/user-groups/$groupId/members/', data: {
+  Future<Response> addUserToUserGroup(num userGroupId, num userId) {
+    return _dio.post('/user-groups/$userGroupId/members/', data: {
       "user_id": userId
     });
   }
 
-  Future<Response> rmUserFromUserGroup(num groupId, num userId) {
-    return _dio.delete('/user-groups/$groupId/members/$userId/');
+  Future<Response> rmUserFromUserGroup(num userGroupId, num userId) {
+    return _dio.delete('/user-groups/$userGroupId/members/$userId/');
+  }
+
+  Future<Response> changeUserGroupPermissionOnDevice(num userGroupId, PermissionLevel level, num deviceId) {
+    return _dio.put('/permissions/group/$userGroupId', data: {
+      "device_id": deviceId,
+      "permission_level": level.name
+    });
+  }
+
+  Future<Response> changeUserGroupPermissionOnDeviceGroup(num userGroupId, PermissionLevel level, num deviceGroupId) {
+    return _dio.put('/permissions/group/$userGroupId', data: {
+      "device_group_id": deviceGroupId,
+      "permission_level": level.name
+    });
   }
 } 
