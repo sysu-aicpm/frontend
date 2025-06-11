@@ -1,21 +1,21 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home_app/api/api_client.dart';
 import 'package:smart_home_app/api/models/user_group.dart';
-import 'package:smart_home_app/bloc/user_group_overview/event.dart';
-import 'package:smart_home_app/bloc/user_group_overview/state.dart';
+import 'package:smart_home_app/bloc/user_group_list/event.dart';
+import 'package:smart_home_app/bloc/user_group_list/state.dart';
 
-class UserGroupOverviewBloc extends Bloc<UserGroupOverviewEvent, UserGroupOverviewState> {
+class UserGroupListBloc extends Bloc<UserGroupListEvent, UserGroupListState> {
   final ApiClient _apiClient;
 
-  UserGroupOverviewBloc(this._apiClient) : super(UserGroupOverviewInitial()) {
-    on<LoadUserGroupOverview>(_onLoadUsers);
+  UserGroupListBloc(this._apiClient) : super(UserGroupListInitial()) {
+    on<LoadUserGroupList>(_onLoadUsers);
   }
 
   Future<void> _onLoadUsers(
-    LoadUserGroupOverview event,
-    Emitter<UserGroupOverviewState> emit,
+    LoadUserGroupList event,
+    Emitter<UserGroupListState> emit,
   ) async {
-    emit(UserGroupOverviewInProgress());
+    emit(UserGroupListInProgress());
     try {
       final response = await _apiClient.getUserGroups();
       final userGroups = List<UserGroup>.from(response.data['results']
@@ -31,9 +31,9 @@ class UserGroupOverviewBloc extends Bloc<UserGroupOverviewEvent, UserGroupOvervi
         .where((t) => t != null)
       );
       
-      emit(UserGroupOverviewSuccess(userGroups: userGroups));
+      emit(UserGroupListSuccess(userGroups: userGroups));
     } catch (e) {
-      emit(UserGroupOverviewFailure(error: 'Failed to load user groups. $e'));
+      emit(UserGroupListFailure(error: 'Failed to load user groups. $e'));
     }
   }
 } 

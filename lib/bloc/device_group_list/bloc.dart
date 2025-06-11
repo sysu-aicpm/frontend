@@ -1,21 +1,21 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home_app/api/api_client.dart';
 import 'package:smart_home_app/api/models/device_group.dart';
-import 'package:smart_home_app/bloc/device_group_overview/event.dart';
-import 'package:smart_home_app/bloc/device_group_overview/state.dart';
+import 'package:smart_home_app/bloc/device_group_list/event.dart';
+import 'package:smart_home_app/bloc/device_group_list/state.dart';
 
-class DeviceGroupOverviewBloc extends Bloc<DeviceGroupOverviewEvent, DeviceGroupOverviewState> {
+class DeviceGroupListBloc extends Bloc<DeviceGroupListEvent, DeviceGroupListState> {
   final ApiClient _apiClient;
 
-  DeviceGroupOverviewBloc(this._apiClient) : super(DeviceGroupOverviewInitial()) {
-    on<LoadDeviceGroupOverview>(_onLoadUsers);
+  DeviceGroupListBloc(this._apiClient) : super(DeviceGroupListInitial()) {
+    on<LoadDeviceGroupList>(_onLoadUsers);
   }
 
   Future<void> _onLoadUsers(
-    LoadDeviceGroupOverview event,
-    Emitter<DeviceGroupOverviewState> emit,
+    LoadDeviceGroupList event,
+    Emitter<DeviceGroupListState> emit,
   ) async {
-    emit(DeviceGroupOverviewInProgress());
+    emit(DeviceGroupListInProgress());
     try {
       final response = await _apiClient.getDeviceGroups();
       final devices = List<DeviceGroup>.from(response.data['results']
@@ -31,9 +31,9 @@ class DeviceGroupOverviewBloc extends Bloc<DeviceGroupOverviewEvent, DeviceGroup
         .where((t) => t != null)
       );
       
-      emit(DeviceGroupOverviewSuccess(deviceGroups: devices));
+      emit(DeviceGroupListSuccess(deviceGroups: devices));
     } catch (e) {
-      emit(DeviceGroupOverviewFailure(error: 'Failed to load device groups. $e'));
+      emit(DeviceGroupListFailure(error: 'Failed to load device groups. $e'));
     }
   }
 } 

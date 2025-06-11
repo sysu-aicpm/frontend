@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home_app/bloc/auth/bloc.dart';
 import 'package:smart_home_app/bloc/auth/event.dart';
-import 'package:smart_home_app/pages/admin/device_groups_page.dart';
-import 'package:smart_home_app/pages/admin/user_groups_page.dart';
-import 'package:smart_home_app/pages/admin/users_page.dart';
-import 'package:smart_home_app/pages/device_overview_page.dart';
+import 'package:smart_home_app/pages/admin/device_group_list_page.dart';
+import 'package:smart_home_app/pages/admin/user_group_list_page.dart';
+import 'package:smart_home_app/pages/admin/user_list_page.dart';
+import 'package:smart_home_app/pages/device_list_page.dart';
 
 class HomePage extends StatefulWidget {
   final bool isStaff;
@@ -20,10 +20,10 @@ class _HomePageState extends State<HomePage> {
 
   // 页面列表
   final List<Widget> _pages = [
-    const DevicesPage(),
-    const DeviceGroupsPage(),
-    const UsersPage(),
-    const UserGroupsPage(),
+    const DeviceListPage(),
+    const DeviceGroupListPage(),
+    const UserListPage(),
+    const UserGroupListPage(),
   ];
 
   @override

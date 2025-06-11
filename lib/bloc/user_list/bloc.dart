@@ -1,21 +1,21 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home_app/api/api_client.dart';
 import 'package:smart_home_app/api/models/user.dart';
-import 'package:smart_home_app/bloc/user_overview/event.dart';
-import 'package:smart_home_app/bloc/user_overview/state.dart';
+import 'package:smart_home_app/bloc/user_list/event.dart';
+import 'package:smart_home_app/bloc/user_list/state.dart';
 
-class UserOverviewBloc extends Bloc<UserOverviewEvent, UserOverviewState> {
+class UserListBloc extends Bloc<UserListEvent, UserListState> {
   final ApiClient _apiClient;
 
-  UserOverviewBloc(this._apiClient) : super(UserOverviewInitial()) {
-    on<LoadUserOverview>(_onLoadUsers);
+  UserListBloc(this._apiClient) : super(UserListInitial()) {
+    on<LoadUserList>(_onLoadUsers);
   }
 
   Future<void> _onLoadUsers(
-    LoadUserOverview event,
-    Emitter<UserOverviewState> emit,
+    LoadUserList event,
+    Emitter<UserListState> emit,
   ) async {
-    emit(UserOverviewInProgress());
+    emit(UserListInProgress());
     try {
       final response = await _apiClient.getUsers();
       final users = List<User>.from(response.data['results']
@@ -33,9 +33,9 @@ class UserOverviewBloc extends Bloc<UserOverviewEvent, UserOverviewState> {
         .where((t) => t != null)
       );
       
-      emit(UserOverviewSuccess(users: users));
+      emit(UserListSuccess(users: users));
     } catch (e) {
-      emit(UserOverviewFailure(error: 'Failed to load users. $e'));
+      emit(UserListFailure(error: 'Failed to load users. $e'));
     }
   }
 } 

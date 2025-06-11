@@ -1,21 +1,21 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home_app/api/api_client.dart';
 import 'package:smart_home_app/api/models/device.dart';
-import 'package:smart_home_app/bloc/device_overview/event.dart';
-import 'package:smart_home_app/bloc/device_overview/state.dart';
+import 'package:smart_home_app/bloc/device_list/event.dart';
+import 'package:smart_home_app/bloc/device_list/state.dart';
 
-class DeviceOverviewBloc extends Bloc<DeviceOverviewEvent, DeviceOverviewState> {
+class DeviceListBloc extends Bloc<DeviceListEvent, DeviceListState> {
   final ApiClient _apiClient;
 
-  DeviceOverviewBloc(this._apiClient) : super(DeviceOverviewInitial()) {
-    on<LoadDevicesOverview>(_onLoadDevices);
+  DeviceListBloc(this._apiClient) : super(DeviceListInitial()) {
+    on<LoadDeviceList>(_onLoadDevices);
   }
 
   Future<void> _onLoadDevices(
-    LoadDevicesOverview event,
-    Emitter<DeviceOverviewState> emit,
+    LoadDeviceList event,
+    Emitter<DeviceListState> emit,
   ) async {
-    emit(DeviceOverviewInProgress());
+    emit(DeviceListInProgress());
     try {
       final response = await _apiClient.getDevices();
       final devices = List<Device>.from(response.data['data']
@@ -31,9 +31,9 @@ class DeviceOverviewBloc extends Bloc<DeviceOverviewEvent, DeviceOverviewState> 
         .where((device) => device != null)
       );
       
-      emit(DeviceOverviewSuccess(devices: devices));
+      emit(DeviceListSuccess(devices: devices));
     } catch (e) {
-      emit(DeviceOverviewFailure(error: 'Failed to load devices. $e'));
+      emit(DeviceListFailure(error: 'Failed to load devices. $e'));
     }
   }
 } 

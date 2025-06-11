@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home_app/api/api_client.dart';
-import 'package:smart_home_app/bloc/device_overview/bloc.dart';
-import 'package:smart_home_app/bloc/device_overview/event.dart';
-import 'package:smart_home_app/bloc/device_overview/state.dart';
+import 'package:smart_home_app/bloc/device_list/bloc.dart';
+import 'package:smart_home_app/bloc/device_list/event.dart';
+import 'package:smart_home_app/bloc/device_list/state.dart';
 import 'package:smart_home_app/pages/device_details_page.dart';
 
-class DevicesPage extends StatelessWidget {
-  const DevicesPage({super.key});
+class DeviceListPage extends StatelessWidget {
+  const DeviceListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => DeviceOverviewBloc(
+      create: (context) => DeviceListBloc(
         RepositoryProvider.of<ApiClient>(context),
-      )..add(LoadDevicesOverview()),
-      child: BlocBuilder<DeviceOverviewBloc, DeviceOverviewState>(
+      )..add(LoadDeviceList()),
+      child: BlocBuilder<DeviceListBloc, DeviceListState>(
         builder: (context, state) {
-          if (state is DeviceOverviewInProgress) {
+          if (state is DeviceListInProgress) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (state is DeviceOverviewSuccess) {
+          if (state is DeviceListSuccess) {
             final devices = state.devices;
             if (devices.isEmpty) {
               return const Center(child: Text('No devices found.'));
@@ -47,7 +47,7 @@ class DevicesPage extends StatelessWidget {
               },
             );
           }
-          if (state is DeviceOverviewFailure) {
+          if (state is DeviceListFailure) {
             return Center(child: Text(state.error));
           }
           return const Center(child: Text('Something went wrong.'));

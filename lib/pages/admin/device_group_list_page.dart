@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home_app/api/api_client.dart';
-import 'package:smart_home_app/bloc/device_group_overview/bloc.dart';
-import 'package:smart_home_app/bloc/device_group_overview/event.dart';
-import 'package:smart_home_app/bloc/device_group_overview/state.dart';
+import 'package:smart_home_app/bloc/device_group_list/bloc.dart';
+import 'package:smart_home_app/bloc/device_group_list/event.dart';
+import 'package:smart_home_app/bloc/device_group_list/state.dart';
 
-class DeviceGroupsPage extends StatelessWidget {
-  const DeviceGroupsPage({super.key});
+class DeviceGroupListPage extends StatelessWidget {
+  const DeviceGroupListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => DeviceGroupOverviewBloc(
+      create: (context) => DeviceGroupListBloc(
         RepositoryProvider.of<ApiClient>(context),
-      )..add(LoadDeviceGroupOverview()),
-      child: BlocBuilder<DeviceGroupOverviewBloc, DeviceGroupOverviewState>(
+      )..add(LoadDeviceGroupList()),
+      child: BlocBuilder<DeviceGroupListBloc, DeviceGroupListState>(
         builder: (context, state) {
-          if (state is DeviceGroupOverviewInProgress) {
+          if (state is DeviceGroupListInProgress) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (state is DeviceGroupOverviewSuccess) {
+          if (state is DeviceGroupListSuccess) {
             final deviceGroups = state.deviceGroups;
             if (deviceGroups.isEmpty) {
               return const Center(child: Text('No device groups found.'));
@@ -46,7 +46,7 @@ class DeviceGroupsPage extends StatelessWidget {
               },
             );
           }
-          if (state is DeviceGroupOverviewFailure) {
+          if (state is DeviceGroupListFailure) {
             return Center(child: Text(state.error));
           }
           return const Center(child: Text('Something went wrong.'));

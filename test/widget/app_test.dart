@@ -9,16 +9,16 @@ import 'package:smart_home_app/api/models/user.dart';
 import 'package:smart_home_app/bloc/auth/bloc.dart';
 import 'package:smart_home_app/bloc/auth/event.dart';
 import 'package:smart_home_app/bloc/auth/state.dart';
-import 'package:smart_home_app/bloc/device_overview/bloc.dart';
-import 'package:smart_home_app/bloc/device_overview/event.dart';
-import 'package:smart_home_app/bloc/device_overview/state.dart';
+import 'package:smart_home_app/bloc/device_list/bloc.dart';
+import 'package:smart_home_app/bloc/device_list/event.dart';
+import 'package:smart_home_app/bloc/device_list/state.dart';
 import 'package:smart_home_app/main.dart';
 import 'package:smart_home_app/pages/home_page.dart';
 import 'package:smart_home_app/pages/login_page.dart';
 
 // Mock BLoCs
 class MockAuthBloc extends MockBloc<AuthEvent, AuthState> implements AuthBloc {}
-class MockDeviceBloc extends MockBloc<DeviceOverviewEvent, DeviceOverviewState> implements DeviceOverviewBloc {}
+class MockDeviceBloc extends MockBloc<DeviceListEvent, DeviceListState> implements DeviceListBloc {}
 
 // Mock ApiClient
 class MockApiClient extends Mock implements ApiClient {}
@@ -56,7 +56,7 @@ void main() {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>.value(value: mockAuthBloc),
-        BlocProvider<DeviceOverviewBloc>.value(value: mockDeviceBloc),
+        BlocProvider<DeviceListBloc>.value(value: mockDeviceBloc),
       ],
       child: MaterialApp(home: child),
     );
@@ -78,7 +78,7 @@ void main() {
 
     testWidgets('displays HomePage when state is Authenticated', (tester) async {
       when(() => mockAuthBloc.state).thenReturn(const Authenticated(user: tUser));
-      when(() => mockDeviceBloc.state).thenReturn(DeviceOverviewInitial());
+      when(() => mockDeviceBloc.state).thenReturn(DeviceListInitial());
 
       await tester.pumpWidget(createTestableWidget(const MyApp()));
       
@@ -100,7 +100,7 @@ void main() {
 
   group('HomePage Widget Tests', () {
     testWidgets('shows loading indicator when devices are loading', (tester) async {
-      when(() => mockDeviceBloc.state).thenReturn(DeviceOverviewInProgress());
+      when(() => mockDeviceBloc.state).thenReturn(DeviceListInProgress());
 
       await tester.pumpWidget(createTestableWidget(const HomePage(isStaff: false)));
 
@@ -108,7 +108,7 @@ void main() {
     });
 
     testWidgets('displays a list of devices on success', (tester) async {
-      when(() => mockDeviceBloc.state).thenReturn(DeviceOverviewSuccess(devices: tDevices));
+      when(() => mockDeviceBloc.state).thenReturn(DeviceListSuccess(devices: tDevices));
 
       await tester.pumpWidget(createTestableWidget(const HomePage(isStaff: false)));
 
@@ -117,7 +117,7 @@ void main() {
     });
 
     testWidgets('displays error message on failure', (tester) async {
-      when(() => mockDeviceBloc.state).thenReturn(const DeviceOverviewFailure(error: 'Failed'));
+      when(() => mockDeviceBloc.state).thenReturn(const DeviceListFailure(error: 'Failed'));
 
       await tester.pumpWidget(createTestableWidget(const HomePage(isStaff: false)));
 

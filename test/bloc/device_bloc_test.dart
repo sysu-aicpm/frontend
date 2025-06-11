@@ -4,21 +4,21 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:smart_home_app/api/api_client.dart';
 import 'package:smart_home_app/api/models/device.dart';
-import 'package:smart_home_app/bloc/device_overview/bloc.dart';
-import 'package:smart_home_app/bloc/device_overview/event.dart';
-import 'package:smart_home_app/bloc/device_overview/state.dart';
+import 'package:smart_home_app/bloc/device_list/bloc.dart';
+import 'package:smart_home_app/bloc/device_list/event.dart';
+import 'package:smart_home_app/bloc/device_list/state.dart';
 
 // Mocks
 class MockApiClient extends Mock implements ApiClient {}
 class MockDioResponse extends Mock implements Response {}
 
 void main() {
-  late DeviceOverviewBloc deviceBloc;
+  late DeviceListBloc deviceBloc;
   late MockApiClient mockApiClient;
 
   setUp(() {
     mockApiClient = MockApiClient();
-    deviceBloc = DeviceOverviewBloc(mockApiClient);
+    deviceBloc = DeviceListBloc(mockApiClient);
   });
 
   tearDown(() {
@@ -39,36 +39,36 @@ void main() {
   );
 
   test('initial state is DeviceInitial', () {
-    expect(deviceBloc.state, DeviceOverviewInitial());
+    expect(deviceBloc.state, DeviceListInitial());
   });
 
   group('LoadDevices', () {
-    blocTest<DeviceOverviewBloc, DeviceOverviewState>(
+    blocTest<DeviceListBloc, DeviceListState>(
       'emits [DeviceLoadInProgress, DeviceLoadSuccess] when getDevices is successful',
       build: () {
         when(() => mockApiClient.getDevices()).thenAnswer((_) async => tResponse);
         return deviceBloc;
       },
-      act: (bloc) => bloc.add(LoadDevicesOverview()),
+      act: (bloc) => bloc.add(LoadDeviceList()),
       expect: () => [
-        DeviceOverviewInProgress(),
-        DeviceOverviewSuccess(devices: tDevices),
+        DeviceListInProgress(),
+        DeviceListSuccess(devices: tDevices),
       ],
       verify: (_) {
         verify(() => mockApiClient.getDevices()).called(1);
       },
     );
 
-    blocTest<DeviceOverviewBloc, DeviceOverviewState>(
+    blocTest<DeviceListBloc, DeviceListState>(
       'emits [DeviceLoadInProgress, DeviceLoadFailure] when getDevices fails',
       build: () {
         when(() => mockApiClient.getDevices()).thenThrow(Exception('Failed to load devices'));
         return deviceBloc;
       },
-      act: (bloc) => bloc.add(LoadDevicesOverview()),
+      act: (bloc) => bloc.add(LoadDeviceList()),
       expect: () => [
-        DeviceOverviewInProgress(),
-        const DeviceOverviewFailure(error: 'Failed to load devices.'),
+        DeviceListInProgress(),
+        const DeviceListFailure(error: 'Failed to load devices.'),
       ],
       verify: (_) {
         verify(() => mockApiClient.getDevices()).called(1);
