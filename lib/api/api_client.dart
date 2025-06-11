@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:smart_home_app/api/models/permission.dart';
 import 'package:smart_home_app/config/env.dart';
 import 'package:smart_home_app/utils/secure_storage.dart';
 
@@ -23,7 +24,8 @@ class ApiClient {
 
   Dio get dio => _dio;
 
-  // Example login method
+  // --------- Authorization ---------
+
   Future<Response> login(String email, String password) {
     return _dio.post('/auth/login/', data: {
       'email': email,
@@ -31,6 +33,7 @@ class ApiClient {
     });
   }
 
+  // TODO: 补充 first_name last_name
   Future<Response> register(String email, String password) {
     return _dio.post('/auth/register/', data: {
       'email': email,
@@ -38,19 +41,103 @@ class ApiClient {
     });
   }
 
-  // Get current user's info
   Future<Response> getUserInfo() {
     return _dio.get('/auth/me/');
   }
 
-  // Method to fetch devices
+  // --------- Device Management ---------
+
   Future<Response> getDevices() {
     return _dio.get('/devices/overview/');
   }
 
-  // --- Device Management ---
-
   Future<Response> getDeviceDetail(num deviceId) {
     return _dio.get('/devices/$deviceId/detail');
+  }
+
+  // TODO: 控制设备 /devices/$deviceId/control
+
+  // --------- Admin Management ---------
+  // 以下部分仅限 is_staff 的管理员用户可调用
+  // TODO: 考虑用另一个 api client 操作这部分
+
+  // --------- Admin Device Groups ---------
+
+  Future<Response> getDeviceGroups() {
+    return _dio.get('/device-groups/');
+  }
+
+  Future<Response> createDeviceGroup(String name, String? description) {
+    var data = {'name': name};
+    if (description != null) data['description'] = description;
+    return _dio.post('/device-groups/', data: data);
+  }
+
+  Future<Response> changeDeviceGroupName(num deviceGroupId, String name, String? description) {
+    var data = {'name': name};
+    if (description != null) data['description'] = description;
+    return _dio.put('/device-groups/$deviceGroupId/', data: data);
+  }
+
+  Future<Response> addDeviceToDeviceGroup(num groupId, num deviceId) {
+    return _dio.post('/device-groups/$groupId/devices/', data: {
+      "device_id": deviceId
+    });
+  }
+
+  Future<Response> rmDeviceFromDeviceGroup(num groupId, num deviceId) {
+    return _dio.delete('/device-groups/$groupId/devices/$deviceId/');
+  }
+
+  // --------- Admin Users ---------
+
+  Future<Response> getUsers() {
+    return _dio.get('/auth/all/');
+  }
+
+  Future<Response> getUserPermission(num userId) {
+    return _dio.get('/permissions/user/$userId');
+  }
+
+  Future<Response> changeUserPermissionOnDevice(num userId, PermissionLevel level, num deviceId) {
+    return _dio.put('/permissions/user/$userId', data: {
+      "device_id": deviceId,
+      "permission_level": level.name
+    });
+  }
+
+  Future<Response> changeUserPermissionOnDeviceGroup(num userId, PermissionLevel level, num deviceGroupId) {
+    return _dio.put('/permissions/user/$userId', data: {
+      "device_group_id": deviceGroupId,
+      "permission_level": level.name
+    });
+  }
+
+  // --------- Admin User Groups ---------
+
+  Future<Response> getUSerGroups() {
+    return _dio.get('/user-groups/');
+  }
+
+  Future<Response> createUserGroup(String name, String? description) {
+    var data = {'name': name};
+    if (description != null) data['description'] = description;
+    return _dio.post('/user-groups/', data: data);
+  }
+
+  Future<Response> changeUserGroupName(num userGroupId, String name, String? description) {
+    var data = {'name': name};
+    if (description != null) data['description'] = description;
+    return _dio.post('/user-groups/$userGroupId/', data: data);
+  }
+
+  Future<Response> addUserToUserGroup(num groupId, num userId) {
+    return _dio.post('/user-groups/$groupId/members/', data: {
+      "user_id": userId
+    });
+  }
+
+  Future<Response> rmUserFromUserGroup(num groupId, num userId) {
+    return _dio.delete('/user-groups/$groupId/members/$userId/');
   }
 } 
