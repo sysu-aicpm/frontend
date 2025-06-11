@@ -122,7 +122,7 @@ class ApiClient {
 
   // --------- Admin User Groups ---------
 
-  Future<Response> getUSerGroups() {
+  Future<Response> getUserGroups() {
     return _dio.get('/user-groups/');
   }
 

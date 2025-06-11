@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
 
   // 页面列表
   final List<Widget> _pages = [
-    const DeviceOverviewPage(),
+    const DevicesPage(),
     const DeviceGroupsPage(),
     const UsersPage(),
     const UserGroupsPage(),
@@ -60,15 +60,15 @@ class _HomePageState extends State<HomePage> {
               label: 'Devices',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.business),
+              icon: Icon(Icons.device_hub),
               label: 'Device Groups',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.business),
+              icon: Icon(Icons.person),
               label: 'Users',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.school),
+              icon: Icon(Icons.groups),
               label: 'User Groups',
             ),
           ],

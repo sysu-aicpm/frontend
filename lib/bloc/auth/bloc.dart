@@ -24,12 +24,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (token != null) {
       try {
         final userInfoResponse = await _apiClient.getUserInfo();
+        final json = userInfoResponse.data['data'];
         final user = User(
-          id: userInfoResponse.data['data']['id'].toString(),
-          username: userInfoResponse.data['data']['username'] ?? 'Unknown',
-          firstname: userInfoResponse.data['data']['first_name'] ?? 'Unknown',
-          lastname: userInfoResponse.data['data']['last_name'] ?? 'Unknown',
-          isStaff: userInfoResponse.data['data']['is_staff'] ?? false,
+          id: json['id'].toString(),
+          email: json['email'] ?? 'Unknown',
+          username: json['username'] ?? 'Unknown',
+          firstname: json['first_name'] ?? 'Unknown',
+          lastname: json['last_name'] ?? 'Unknown',
+          isStaff: json['is_staff'] ?? false,
         );
         emit(Authenticated(user: user));
       } catch (e) {
@@ -55,13 +57,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       // TODO: save refresh TOKEN
 
       // Then, get user info with the new token
-      final userInfoResponse = await _apiClient.getUserInfo();      
+      final userInfoResponse = await _apiClient.getUserInfo();
+      final json = userInfoResponse.data['data'];
       final user = User(
-        id: userInfoResponse.data['data']['id'].toString(),
-        username: userInfoResponse.data['data']['username'] ?? 'Unknown',
-        firstname: userInfoResponse.data['data']['first_name'] ?? 'Unknown',
-        lastname: userInfoResponse.data['data']['last_name'] ?? 'Unknown',
-        isStaff: userInfoResponse.data['data']['is_staff'] ?? false,
+        id: json['id'].toString(),
+        email: json['email'] ?? 'Unknown',
+        username: json['username'] ?? 'Unknown',
+        firstname: json['first_name'] ?? 'Unknown',
+        lastname: json['last_name'] ?? 'Unknown',
+        isStaff: json['is_staff'] ?? false,
       );
       emit(Authenticated(user: user));
     } catch (e) {

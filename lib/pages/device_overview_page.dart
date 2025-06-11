@@ -6,8 +6,8 @@ import 'package:smart_home_app/bloc/device_overview/event.dart';
 import 'package:smart_home_app/bloc/device_overview/state.dart';
 import 'package:smart_home_app/pages/device_details_page.dart';
 
-class DeviceOverviewPage extends StatelessWidget {
-  const DeviceOverviewPage({super.key});
+class DevicesPage extends StatelessWidget {
+  const DevicesPage({super.key});
 
   @override
   Widget build(BuildContext context) {

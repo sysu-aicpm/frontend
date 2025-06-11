@@ -42,6 +42,7 @@ void main() {
 
   const tUser = User(
     id: '1',
+    email: '114@514.com',
     username: 'test',
     firstname: 'a',
     lastname: 'b',
