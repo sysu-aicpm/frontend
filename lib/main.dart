@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         )..add(AuthenticationStatusChecked()),
         child: MaterialApp(
           title: 'Smart Home App',
-      theme: ThemeData(
+          theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
           home: const AppNavigator(),
@@ -48,14 +48,14 @@ class AppNavigator extends StatelessWidget {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is Authenticated) {
-          return const HomePage();
+          return HomePage(isStaff: state.user.isStaff);
         }
         if (state is Unauthenticated || state is AuthFailure) {
           return const LoginPage();
         }
         // Show a loading screen while checking auth status
         return const Scaffold(
-      body: Center(
+          body: Center(
             child: CircularProgressIndicator(),
           ),
         );

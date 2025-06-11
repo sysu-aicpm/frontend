@@ -26,7 +26,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final userInfoResponse = await _apiClient.getUserInfo();
         final user = User(
           id: userInfoResponse.data['data']['id'].toString(),
-          username: userInfoResponse.data['data']['username'],
+          username: userInfoResponse.data['data']['username'] ?? 'Unknown',
+          firstname: userInfoResponse.data['data']['first_name'] ?? 'Unknown',
+          lastname: userInfoResponse.data['data']['last_name'] ?? 'Unknown',
+          isStaff: userInfoResponse.data['data']['is_staff'] ?? false,
         );
         emit(Authenticated(user: user));
       } catch (e) {
@@ -54,7 +57,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final userInfoResponse = await _apiClient.getUserInfo();      
       final user = User(
         id: userInfoResponse.data['data']['id'].toString(),
-        username: userInfoResponse.data['data']['username'],
+        username: userInfoResponse.data['data']['username'] ?? 'Unknown',
+        firstname: userInfoResponse.data['data']['first_name'] ?? 'Unknown',
+        lastname: userInfoResponse.data['data']['last_name'] ?? 'Unknown',
+        isStaff: userInfoResponse.data['data']['is_staff'] ?? false,
       );
       emit(Authenticated(user: user));
     } catch (e) {

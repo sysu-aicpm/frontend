@@ -28,7 +28,13 @@ void main() {
     authBloc.close();
   });
 
-  const tUser = User(id: '1', username: 'test');
+  const tUser = User(
+    id: '1',
+    username: 'test',
+    firstname: 'a',
+    lastname: 'b',
+    isStaff: false,
+  );
   final tLoginResponse = Response(
     requestOptions: RequestOptions(path: ''),
     data: {'access': 'fake_access_token'},

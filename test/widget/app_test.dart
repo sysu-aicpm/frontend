@@ -40,7 +40,13 @@ void main() {
     registerFallbackValue(const LoginRequested(email: '', password: ''));
   });
 
-  const tUser = User(id: '1', username: 'test');
+  const tUser = User(
+    id: '1',
+    username: 'test',
+    firstname: 'a',
+    lastname: 'b',
+    isStaff: false,
+  );
   final tDevices = [
     const Device(id: '1', name: 'Smart Lamp', type: DeviceType.light, isOnline: true),
   ];
@@ -95,7 +101,7 @@ void main() {
     testWidgets('shows loading indicator when devices are loading', (tester) async {
       when(() => mockDeviceBloc.state).thenReturn(DeviceOverviewInProgress());
 
-      await tester.pumpWidget(createTestableWidget(const HomePage()));
+      await tester.pumpWidget(createTestableWidget(const HomePage(isStaff: false)));
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -103,7 +109,7 @@ void main() {
     testWidgets('displays a list of devices on success', (tester) async {
       when(() => mockDeviceBloc.state).thenReturn(DeviceOverviewSuccess(devices: tDevices));
 
-      await tester.pumpWidget(createTestableWidget(const HomePage()));
+      await tester.pumpWidget(createTestableWidget(const HomePage(isStaff: false)));
 
       expect(find.byType(ListView), findsOneWidget);
       expect(find.text('Smart Lamp'), findsOneWidget);
@@ -112,7 +118,7 @@ void main() {
     testWidgets('displays error message on failure', (tester) async {
       when(() => mockDeviceBloc.state).thenReturn(const DeviceOverviewFailure(error: 'Failed'));
 
-      await tester.pumpWidget(createTestableWidget(const HomePage()));
+      await tester.pumpWidget(createTestableWidget(const HomePage(isStaff: false)));
 
       expect(find.text('Failed'), findsOneWidget);
     });

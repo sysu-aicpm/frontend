@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
           }
           if (state is Authenticated) {
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => const HomePage()),
+              MaterialPageRoute(builder: (_) => HomePage(isStaff: state.user.isStaff)),
             );
           }
         },
