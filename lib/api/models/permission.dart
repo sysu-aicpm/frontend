@@ -6,30 +6,38 @@ enum PermissionLevel {
   usable,
   configurable,
   monitorable,
-  manageable,
-}
+  manageable;
 
-class UserPermission extends Equatable {
-  final String id;
-  final String userId;
-  final String username; // For display purposes
-  final PermissionLevel permissionLevel;
-
-  const UserPermission({
-    required this.id,
-    required this.userId,
-    required this.username,
-    required this.permissionLevel,
-  });
-
-  @override
-  List<Object> get props => [id, userId, username, permissionLevel];
-
-  // Helper to convert string from API to enum
-  static PermissionLevel levelFromString(String level) {
+  static PermissionLevel fromString(String? value) {
     return PermissionLevel.values.firstWhere(
-      (e) => e.name == level,
+      (e) => e.name == value,
       orElse: () => PermissionLevel.none,
     );
   }
-} 
+}
+
+class DevicePermission extends Equatable {
+  final num deviceId;
+  final PermissionLevel level;
+
+  const DevicePermission({
+    required this.deviceId,
+    required this.level
+  });
+
+  @override
+  List<Object> get props => [deviceId, level];
+}
+
+class DeviceGroupPermission extends Equatable {
+  final num deviceGroupId;
+  final PermissionLevel level;
+
+  const DeviceGroupPermission({
+    required this.deviceGroupId,
+    required this.level
+  });
+
+  @override
+  List<Object> get props => [deviceGroupId, level];
+}

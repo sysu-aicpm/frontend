@@ -8,19 +8,19 @@ class DeviceGroupListBloc extends Bloc<DeviceGroupListEvent, DeviceGroupListStat
   final ApiClient _apiClient;
 
   DeviceGroupListBloc(this._apiClient) : super(DeviceGroupListInitial()) {
-    on<LoadDeviceGroupList>(_onLoadUsers);
+    on<LoadDeviceGroupList>(_onLoadDeviceGroupList);
     on<CreateDeviceGroup>(_onCreateDeviceGroup);
     on<RemoveDeviceGroup>(_onRemoveDeviceGroup);
   }
 
-  Future<void> _onLoadUsers(
+  Future<void> _onLoadDeviceGroupList(
     LoadDeviceGroupList event,
     Emitter<DeviceGroupListState> emit,
   ) async {
     emit(DeviceGroupListInProgress());
     try {
       final response = await _apiClient.getDeviceGroups();
-      final devices = List<DeviceGroup>.from(response.data['results']
+      final deviceGroups = List<DeviceGroup>.from(response.data['results']
         .map(
           (json) => DeviceGroup(
             id: json['id']?.toString() ?? 'Unknown',
@@ -33,7 +33,7 @@ class DeviceGroupListBloc extends Bloc<DeviceGroupListEvent, DeviceGroupListStat
         .where((t) => t != null)
       );
       
-      emit(DeviceGroupListSuccess(deviceGroups: devices));
+      emit(DeviceGroupListSuccess(deviceGroups: deviceGroups));
     } catch (e) {
       emit(DeviceGroupListFailure(error: 'Failed to load device groups. $e'));
     }

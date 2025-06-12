@@ -8,10 +8,10 @@ class DeviceListBloc extends Bloc<DeviceListEvent, DeviceListState> {
   final ApiClient _apiClient;
 
   DeviceListBloc(this._apiClient) : super(DeviceListInitial()) {
-    on<LoadDeviceList>(_onLoadDevices);
+    on<LoadDeviceList>(_onLoadDeviceList);
   }
 
-  Future<void> _onLoadDevices(
+  Future<void> _onLoadDeviceList(
     LoadDeviceList event,
     Emitter<DeviceListState> emit,
   ) async {

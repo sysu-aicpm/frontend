@@ -5,7 +5,7 @@ import 'package:smart_home_app/api/models/user.dart';
 import 'package:smart_home_app/bloc/user_list/bloc.dart';
 import 'package:smart_home_app/bloc/user_list/event.dart';
 import 'package:smart_home_app/bloc/user_list/state.dart';
-import 'package:smart_home_app/pages/admin/user_detail_page.dart';
+import 'package:smart_home_app/pages/admin/user_permission_page.dart';
 
 class UserListPage extends StatelessWidget {
   const UserListPage({super.key});
@@ -97,13 +97,6 @@ class UserListPage extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         child: InkWell(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => UserDetailPage(user: user),
-              ),
-            );
-          },
           borderRadius: BorderRadius.circular(16),
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -151,6 +144,48 @@ class UserListPage extends StatelessWidget {
                     ],
                   ),
                 ),
+                const SizedBox(width: 8),
+                PopupMenuButton<String>(
+                  onSelected: (value) {
+                    if (value == 'permission') {               
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => UserPermissionPage(userId: user.id),
+                        ),
+                      );
+                    }
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  icon: Icon(
+                    Icons.more_vert_rounded,
+                    color: Colors.grey[600],
+                    size: 20,
+                  ),
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: 'permission',
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.security,
+                            color: Colors.purple[400],
+                            size: 18,
+                          ),
+                          SizedBox(width: 12),
+                          Text(
+                            '权限管理',
+                            style: TextStyle(
+                              color: Colors.purple[400],
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ]
+                )
               ],
             ),
           ),

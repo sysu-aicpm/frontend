@@ -6,6 +6,7 @@ import 'package:smart_home_app/bloc/user_group_list/bloc.dart';
 import 'package:smart_home_app/bloc/user_group_list/event.dart';
 import 'package:smart_home_app/bloc/user_group_list/state.dart';
 import 'package:smart_home_app/pages/admin/user_group_detail_page.dart';
+import 'package:smart_home_app/pages/admin/user_group_permission_page.dart';
 
 class UserGroupListPage extends StatelessWidget {
   const UserGroupListPage({super.key});
@@ -176,6 +177,13 @@ class UserGroupListPage extends StatelessWidget {
                     if (value == 'delete') {
                       _showDeleteConfirmationDialog(context, userGroup);
                     }
+                    if (value == 'permission') {               
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => UserGroupPermissionPage(userGroupId: userGroup.id),
+                        ),
+                      );
+                    }
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -186,6 +194,26 @@ class UserGroupListPage extends StatelessWidget {
                     size: 20,
                   ),
                   itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: 'permission',
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.security,
+                            color: Colors.purple[400],
+                            size: 18,
+                          ),
+                          SizedBox(width: 12),
+                          Text(
+                            '权限管理',
+                            style: TextStyle(
+                              color: Colors.purple[400],
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     const PopupMenuItem(
                       value: 'delete',
                       child: Row(
@@ -197,7 +225,7 @@ class UserGroupListPage extends StatelessWidget {
                           ),
                           SizedBox(width: 12),
                           Text(
-                            'Delete',
+                            '删除',
                             style: TextStyle(
                               color: Colors.red,
                               fontSize: 14,

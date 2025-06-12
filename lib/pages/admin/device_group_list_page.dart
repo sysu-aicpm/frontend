@@ -197,7 +197,7 @@ class DeviceGroupListPage extends StatelessWidget {
                           ),
                           SizedBox(width: 12),
                           Text(
-                            'Delete',
+                            '删除',
                             style: TextStyle(
                               color: Colors.red,
                               fontSize: 14,
