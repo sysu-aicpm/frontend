@@ -9,6 +9,8 @@ class DeviceGroupListBloc extends Bloc<DeviceGroupListEvent, DeviceGroupListStat
 
   DeviceGroupListBloc(this._apiClient) : super(DeviceGroupListInitial()) {
     on<LoadDeviceGroupList>(_onLoadUsers);
+    on<CreateDeviceGroup>(_onCreateDeviceGroup);
+    on<RemoveDeviceGroup>(_onRemoveDeviceGroup);
   }
 
   Future<void> _onLoadUsers(
@@ -36,4 +38,44 @@ class DeviceGroupListBloc extends Bloc<DeviceGroupListEvent, DeviceGroupListStat
       emit(DeviceGroupListFailure(error: 'Failed to load device groups. $e'));
     }
   }
-} 
+
+  Future<void> _onCreateDeviceGroup(
+    CreateDeviceGroup event,
+    Emitter<DeviceGroupListState> emit,
+  ) async {
+    final currentState = state;
+    if (currentState is DeviceGroupListSuccess) {
+      try {
+        // 调用 api 创建设备组
+        await _apiClient.createDeviceGroup(
+          event.name,
+          event.description
+        );
+        
+        // 刷新设备组列表
+        add(LoadDeviceGroupList());
+      } catch (e) {
+        emit(DeviceGroupListFailure(error: 'Failed to create device group: $e'));
+      }
+    }
+  }
+  
+  Future<void> _onRemoveDeviceGroup(
+    RemoveDeviceGroup event,
+    Emitter<DeviceGroupListState> emit,
+  ) async {
+    final currentState = state;
+    if (currentState is DeviceGroupListSuccess) {
+      try {
+        await _apiClient.deleteDeviceGroup(
+          num.parse(event.deviceGroupId)
+        );
+        
+        // 刷新设备组列表
+        add(LoadDeviceGroupList());
+      } catch (e) {
+        emit(DeviceGroupListFailure(error: 'Failed to delete device group: $e'));
+      }
+    }
+  }
+}

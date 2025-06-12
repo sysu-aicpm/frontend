@@ -9,6 +9,8 @@ class UserGroupListBloc extends Bloc<UserGroupListEvent, UserGroupListState> {
 
   UserGroupListBloc(this._apiClient) : super(UserGroupListInitial()) {
     on<LoadUserGroupList>(_onLoadUsers);
+    on<CreateUserGroup>(_onCreateUserGroup);
+    on<RemoveUserGroup>(_onRemoveUserGroup);
   }
 
   Future<void> _onLoadUsers(
@@ -36,4 +38,44 @@ class UserGroupListBloc extends Bloc<UserGroupListEvent, UserGroupListState> {
       emit(UserGroupListFailure(error: 'Failed to load user groups. $e'));
     }
   }
-} 
+
+  Future<void> _onCreateUserGroup(
+    CreateUserGroup event,
+    Emitter<UserGroupListState> emit,
+  ) async {
+    final currentState = state;
+    if (currentState is UserGroupListSuccess) {
+      try {
+        // 调用 api 创建用户组
+        await _apiClient.createUserGroup(
+          event.name,
+          event.description
+        );
+        
+        // 刷新用户组列表
+        add(LoadUserGroupList());
+      } catch (e) {
+        emit(UserGroupListFailure(error: 'Failed to create user group: $e'));
+      }
+    }
+  }
+  
+  Future<void> _onRemoveUserGroup(
+    RemoveUserGroup event,
+    Emitter<UserGroupListState> emit,
+  ) async {
+    final currentState = state;
+    if (currentState is UserGroupListSuccess) {
+      try {
+        await _apiClient.deleteUserGroup(
+          num.parse(event.userGroupId)
+        );
+        
+        // 刷新用户组列表
+        add(LoadUserGroupList());
+      } catch (e) {
+        emit(UserGroupListFailure(error: 'Failed to delete user group: $e'));
+      }
+    }
+  }
+}

@@ -73,6 +73,10 @@ class ApiClient {
     return _dio.post('/device-groups/', data: data);
   }
 
+  Future<Response> deleteDeviceGroup(num deviceGroupId) {
+    return _dio.delete('/device-groups/$deviceGroupId/');
+  }
+
   Future<Response> changeDeviceGroupName(num deviceGroupId, String name, String? description) {
     var data = {'name': name};
     if (description != null) data['description'] = description;
@@ -130,6 +134,10 @@ class ApiClient {
     var data = {'name': name};
     if (description != null) data['description'] = description;
     return _dio.post('/user-groups/', data: data);
+  }
+
+  Future<Response> deleteUserGroup(num userGroupId) {
+    return _dio.delete('/user-groups/$userGroupId/');
   }
 
   Future<Response> changeUserGroupName(num userGroupId, String name, String? description) {
