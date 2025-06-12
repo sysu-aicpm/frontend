@@ -5,6 +5,7 @@ import 'package:smart_home_app/bloc/device_list/bloc.dart';
 import 'package:smart_home_app/bloc/device_list/event.dart';
 import 'package:smart_home_app/bloc/device_list/state.dart';
 import 'package:smart_home_app/pages/device_detail_page.dart';
+import 'package:smart_home_app/utils/styles.dart';
 
 class DeviceListPage extends StatelessWidget {
   const DeviceListPage({super.key});
@@ -30,12 +31,6 @@ class DeviceListPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final device = devices[index];
                 return ListTile(
-                  title: Text(device.name),
-                  subtitle: Text(device.type.name),
-                  trailing: Icon(
-                    Icons.circle,
-                    color: device.isOnline ? Colors.green : Colors.red,
-                  ),
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -43,6 +38,64 @@ class DeviceListPage extends StatelessWidget {
                       ),
                     );
                   },
+                  contentPadding: const EdgeInsets.all(16),
+                  leading: Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: getDeviceTypeColor(device.type).withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      getDeviceTypeIcon(device.type),
+                      color: getDeviceTypeColor(device.type),
+                      size: 24,
+                    ),
+                  ),
+                  title: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          device.name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: device.isOnline ? Colors.green : Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        device.isOnline ? '在线' : '离线',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: device.isOnline ? Colors.green : Colors.red,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 8),
+                      Text(
+                        getDeviceTypeName(device.type),
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
+                  ),
                 );
               },
             );

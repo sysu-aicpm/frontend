@@ -134,7 +134,7 @@ class DeviceGroupListPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
-                    Icons.devices_other,
+                    Icons.group_work,
                     color: Colors.grey[600],
                     size: 24,
                   ),
@@ -231,7 +231,7 @@ class DeviceGroupListPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(24),
               ),
               child: Icon(
-                Icons.devices_other,
+                Icons.group_work,
                 size: 48,
                 color: Colors.grey[400],
               ),

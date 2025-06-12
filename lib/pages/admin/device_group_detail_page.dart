@@ -79,7 +79,7 @@ class DeviceGroupDetailPage extends StatelessWidget {
           ),
           child: Center(
             child: Icon(
-              Icons.devices_other,
+              Icons.group_work,
               size: 80,
               color: Colors.grey[600],
             ),
@@ -337,7 +337,7 @@ class DeviceGroupDetailPage extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
-            Icons.device_hub,
+            Icons.group_work,
             color: device.isOnline ? Colors.green[600] : Colors.red[600],
             size: 20,
           ),

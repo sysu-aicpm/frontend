@@ -180,7 +180,7 @@ class _UserPermissionPageState extends State<UserPermissionPage> with TickerProv
     }).toList();
 
     if (filteredDevices.isEmpty) {
-      return _buildEmptyState('暂无设备', Icons.devices_other);
+      return _buildEmptyState('暂无设备', getDeviceTypeIcon(DeviceType.unknown));
     }
 
     return ListView.builder(
@@ -211,7 +211,7 @@ class _UserPermissionPageState extends State<UserPermissionPage> with TickerProv
     }).toList();
 
     if (filteredDeviceGroups.isEmpty) {
-      return _buildEmptyState('暂无设备组', Icons.group_work);
+      return _buildEmptyState('暂无设备组', getDeviceTypeIcon(DeviceType.unknown));
     }
 
     return ListView.builder(

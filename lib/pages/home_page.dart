@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
               label: 'Devices',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.device_hub),
+              icon: Icon(Icons.group_work),
               label: 'Device Groups',
             ),
             BottomNavigationBarItem(
