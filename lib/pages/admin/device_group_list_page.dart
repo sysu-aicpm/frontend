@@ -4,6 +4,7 @@ import 'package:smart_home_app/api/api_client.dart';
 import 'package:smart_home_app/bloc/device_group_list/bloc.dart';
 import 'package:smart_home_app/bloc/device_group_list/event.dart';
 import 'package:smart_home_app/bloc/device_group_list/state.dart';
+import 'package:smart_home_app/pages/admin/device_group_detail_page.dart';
 
 class DeviceGroupListPage extends StatelessWidget {
   const DeviceGroupListPage({super.key});
@@ -35,13 +36,13 @@ class DeviceGroupListPage extends StatelessWidget {
                   //   Icons.circle,
                   //   color: device. ? Colors.green : Colors.red,
                   // ),
-                  // onTap: () {
-                  //   Navigator.of(context).push(
-                  //     MaterialPageRoute(
-                  //       builder: (_) => DeviceDetailPage(device: device),
-                  //     ),
-                  //   );
-                  // },
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => DeviceGroupDetailPage(deviceGroup: deviceGroup),
+                      ),
+                    );
+                  },
                 );
               },
             );

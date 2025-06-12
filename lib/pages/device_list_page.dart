@@ -4,7 +4,7 @@ import 'package:smart_home_app/api/api_client.dart';
 import 'package:smart_home_app/bloc/device_list/bloc.dart';
 import 'package:smart_home_app/bloc/device_list/event.dart';
 import 'package:smart_home_app/bloc/device_list/state.dart';
-import 'package:smart_home_app/pages/device_details_page.dart';
+import 'package:smart_home_app/pages/device_detail_page.dart';
 
 class DeviceListPage extends StatelessWidget {
   const DeviceListPage({super.key});

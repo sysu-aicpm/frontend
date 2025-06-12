@@ -4,6 +4,7 @@ import 'package:smart_home_app/api/api_client.dart';
 import 'package:smart_home_app/bloc/user_group_list/bloc.dart';
 import 'package:smart_home_app/bloc/user_group_list/event.dart';
 import 'package:smart_home_app/bloc/user_group_list/state.dart';
+import 'package:smart_home_app/pages/admin/user_group_detail_page.dart';
 
 class UserGroupListPage extends StatelessWidget {
   const UserGroupListPage({super.key});
@@ -35,13 +36,13 @@ class UserGroupListPage extends StatelessWidget {
                   //   Icons.circle,
                   //   color: user. ? Colors.green : Colors.red,
                   // ),
-                  // onTap: () {
-                  //   Navigator.of(context).push(
-                  //     MaterialPageRoute(
-                  //       builder: (_) => UserDetailPage(device: user),
-                  //     ),
-                  //   );
-                  // },
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => UserGroupDetailPage(userGroup: userGroup),
+                      ),
+                    );
+                  },
                 );
               },
             );
