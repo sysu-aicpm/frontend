@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home_app/bloc/auth/bloc.dart';
 import 'package:smart_home_app/bloc/auth/event.dart';
+import 'package:smart_home_app/flutter_chat_desktop/presentation/chat_screen.dart';
 import 'package:smart_home_app/pages/admin/device_group_list_page.dart';
 import 'package:smart_home_app/pages/admin/user_group_list_page.dart';
 import 'package:smart_home_app/pages/admin/user_list_page.dart';
@@ -18,13 +19,46 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0; // 默认显示第一个页面
 
-  // 页面列表
-  final List<Widget> _pages = [
-    const DeviceListPage(),
-    const DeviceGroupListPage(),
-    const UserListPage(),
-    const UserGroupListPage(),
-  ];
+  List<Widget> _pages(bool isStaff) {
+    List<Widget> pages = [];
+    pages.add(const DeviceListPage());
+    if (isStaff) {
+      pages.add(const DeviceGroupListPage());
+      pages.add(const UserListPage());
+      pages.add(const UserGroupListPage());
+    }
+    pages.add(const ChatScreen());
+    return pages;
+  }
+
+  List<BottomNavigationBarItem> _items(bool isStaff) {
+    List<BottomNavigationBarItem> items = [];
+    
+    items.add(BottomNavigationBarItem(
+      icon: Icon(Icons.home),
+      label: 'Devices',
+    ));
+    if (isStaff) {
+      items.add(BottomNavigationBarItem(
+        icon: Icon(Icons.group_work),
+        label: 'Device Groups',
+      ));
+      items.add(BottomNavigationBarItem(
+        icon: Icon(Icons.person),
+        label: 'Users',
+      ));
+      items.add(BottomNavigationBarItem(
+        icon: Icon(Icons.groups),
+        label: 'User Groups',
+      ));
+    }
+    items.add(BottomNavigationBarItem(
+      icon: Icon(Icons.forum),
+      label: 'AI Chat',
+    ));
+
+    return items;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,39 +75,19 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: _pages[_currentIndex],
-      // 只有当 isStaff 为 true 时也就是用户为管理员时才显示底部导航栏
-      bottomNavigationBar: 
-        widget.isStaff ? BottomNavigationBar(
-          selectedItemColor: Colors.blue.shade900,
-          unselectedItemColor: Colors.blue.shade600,
-          backgroundColor: Colors.blue.shade200,
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Devices',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.group_work),
-              label: 'Device Groups',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Users',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.groups),
-              label: 'User Groups',
-            ),
-          ],
-        )
-        : null,
+      body: _pages(widget.isStaff)[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.blue.shade900,
+        unselectedItemColor: Colors.blue.shade600,
+        backgroundColor: Colors.blue.shade200,
+        currentIndex:  _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: _items(widget.isStaff),
+      )
     );
   }
 }

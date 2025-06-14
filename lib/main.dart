@@ -1,15 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_home_app/api/api_client.dart';
 import 'package:smart_home_app/bloc/auth/bloc.dart';
 import 'package:smart_home_app/bloc/auth/event.dart';
 import 'package:smart_home_app/bloc/auth/state.dart';
+import 'package:smart_home_app/flutter_chat_desktop/domains/settings/data/settings_repository_impl.dart';
+import 'package:smart_home_app/flutter_chat_desktop/providers/settings_providers.dart';
 import 'package:smart_home_app/pages/home_page.dart';
 import 'package:smart_home_app/pages/login_page.dart';
 import 'package:smart_home_app/utils/secure_storage.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  final initialSettingsRepo = SettingsRepositoryImpl(prefs);
+  final initialApiKey = await initialSettingsRepo.getApiKey();
+  final initialServerList = await initialSettingsRepo.getMcpServerList();
+  
+  runApp(
+    ProviderScope(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
+        settingsRepositoryProvider.overrideWith(
+          (ref) => SettingsRepositoryImpl(ref.watch(sharedPreferencesProvider)),
+        ),
+        apiKeyProvider.overrideWith((ref) => initialApiKey),
+        mcpServerListProvider.overrideWith((ref) => initialServerList),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
