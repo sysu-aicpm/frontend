@@ -34,11 +34,11 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // Create instances of the dependencies
     final SecureStorage secureStorage = SecureStorage();
     final ApiClient apiClient = ApiClient(secureStorage);
@@ -49,6 +49,7 @@ class MyApp extends StatelessWidget {
         create: (context) => AuthBloc(
           context.read<ApiClient>(),
           secureStorage,
+          ref
         )..add(AuthenticationStatusChecked()),
         child: MaterialApp(
           title: 'Smart Home App',
