@@ -1,5 +1,8 @@
 name: Build&Publish
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: [ "main", "master", "ci-test" ]
@@ -7,7 +10,7 @@ on:
     paths: ["lib/**", "pubspec.yaml", "assets/**"]
 
 env:
-  APP_NAME: aicpm
+  APP_NAME: smart_home
 
 jobs:
   linux:
@@ -28,19 +31,13 @@ jobs:
         run: flutter config --enable-linux-desktop
       - name: Build artifacts
         run: flutter build linux --release
-      - name: Package Release files
-        uses: thedoctor0/zip-release@master
-        with:
-          type: 'zip'
-          filename: ${{env.APP_NAME}}-${{github.ref_name}}-linux.zip
-          directory: build/linux/x64/release/bundle
       - name: Release to github
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{github.ref_name}}
-          files: build/linux/x64/release/bundle/${{env.APP_NAME}}-${{github.ref_name}}-linux.zip
+          files: build/linux/x64/release/bundle/${{env.APP_NAME}}
       
       - name: Enable android build
         run: flutter config --enable-android
@@ -70,19 +67,13 @@ jobs:
         run: flutter config --enable-windows-desktop
       - name: Build artifacts
         run: flutter build windows --release
-      - name: Package Release
-        uses: thedoctor0/zip-release@master
-        with:
-          type: 'zip'
-          filename: ${{env.APP_NAME}}-${{github.ref_name}}-windows.zip
-          directory: build/windows/runner/Release
       - name: Release to github
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{github.ref_name}}
-          files: build/windows/runner/Release/${{env.APP_NAME}}-${{github.ref_name}}-windows.zip
+          files: build/windows/x64/runner/Release/*.exe
 
   macos:
     runs-on: macos-latest
@@ -117,11 +108,11 @@ jobs:
       - name: Enable iOS build
         run: flutter config --enable-ios
       - name: Build artifacts
-        run: flutter build ipa --release --no-codesign
+        run: flutter build ios --release --no-codesign
       - name: Release to github
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{github.ref_name}}
-          files: build/ios/ipa/*.ipa
+          files: build/ios/archive/Runner.xcarchive
