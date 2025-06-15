@@ -127,11 +127,16 @@ jobs:
         run: flutter config --enable-ios
       - name: Build artifacts
         run: flutter build ios --release --no-codesign
+      - name: Package Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          filename: ${{env.APP_NAME}}_${{github.ref_name}}_ios.zip
+          directory: build/ios/iphoneos/Runner.app
       - name: Release to github
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: smart-home_ios.app
           tag_name: ${{github.ref_name}}
-          files: build/ios/iphoneos/Runner.app
+          files: build/ios/iphoneos/Runner.app/${{env.APP_NAME}}_${{github.ref_name}}_ios.zip
