@@ -18,20 +18,6 @@ class UserGroupListPage extends StatelessWidget {
     );
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        title: const Text(
-          'User Groups',
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
-        elevation: 0,
-        shadowColor: Colors.black12,
-        surfaceTintColor: Colors.transparent,
-      ),
       body: BlocProvider(
         create: (context) => bloc..add(LoadUserGroupList()),
         child: BlocConsumer<UserGroupListBloc, UserGroupListState>(

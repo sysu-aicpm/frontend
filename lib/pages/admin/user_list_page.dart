@@ -17,20 +17,6 @@ class UserListPage extends StatelessWidget {
     );
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        title: const Text(
-          'Users',
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
-        elevation: 0,
-        shadowColor: Colors.black12,
-        surfaceTintColor: Colors.transparent,
-      ),
       body: BlocProvider(
         create: (context) => bloc..add(LoadUserList()),
         child: BlocConsumer<UserListBloc, UserListState>(
@@ -110,10 +96,14 @@ class UserListPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
-                    Icons.person,
-                    color: Colors.grey[600],
-                    size: 24,
-                  ),
+                    user.isStaff
+                      ? Icons.manage_accounts
+                      : Icons.person,
+                    color: user.isStaff 
+                      ? Colors.purple[300]
+                      : Colors.blue[300],
+                    size: 20,
+                  )
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -209,14 +199,14 @@ class UserListPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(24),
               ),
               child: Icon(
-                Icons.group_work,
+                Icons.not_interested,
                 size: 48,
                 color: Colors.grey[400],
               ),
             ),
             const SizedBox(height: 24),
             Text(
-              'No Device Groups',
+              'No Users',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
