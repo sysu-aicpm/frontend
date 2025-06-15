@@ -19,7 +19,7 @@ jobs:
         with:
           channel: 'stable'
       - name: Install os dependencies
-        run: sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+        run: sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libsecret-1-dev libjsoncpp-dev
       - name: Install project dependencies
         run: flutter pub get
       - name: Generate intermediates
@@ -96,23 +96,23 @@ jobs:
         run: flutter pub get
       - name: Generate intermediates
         run: flutter pub run build_runner build --delete-conflicting-outputs
-      - name: Enable macOS build
-        run: flutter config --enable-macos-desktop
-      - name: Build artifacts
-        run: flutter build macos --release --no-codesign
-      - name: Package Release
-        uses: thedoctor0/zip-release@master
-        with:
-          type: 'zip'
-          filename: ${{env.APP_NAME}}-${{github.ref_name}}-macos.zip
-          directory: build/macos/Build/Products/Release
-      - name: Release to github
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{github.ref_name}}
-          files: build/macos/Build/Products/Release/${{env.APP_NAME}}-${{github.ref_name}}-macos.zip
+      # - name: Enable macOS build
+      #   run: flutter config --enable-macos-desktop
+      # - name: Build artifacts
+      #   run: flutter build macos --release
+      # - name: Package Release
+      #   uses: thedoctor0/zip-release@master
+      #   with:
+      #     type: 'zip'
+      #     filename: ${{env.APP_NAME}}-${{github.ref_name}}-macos.zip
+      #     directory: build/macos/Build/Products/Release
+      # - name: Release to github
+      #   uses: softprops/action-gh-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: ${{github.ref_name}}
+      #     files: build/macos/Build/Products/Release/${{env.APP_NAME}}-${{github.ref_name}}-macos.zip
       
       - name: Enable iOS build
         run: flutter config --enable-ios
