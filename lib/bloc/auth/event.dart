@@ -18,11 +18,13 @@ class LoginRequested extends AuthEvent {
 }
 
 class RegisterRequested extends AuthEvent {
+  final String username;
   final String email;
   final String password;
   final String confirmPassword;
 
   const RegisterRequested({
+    required this.username,
     required this.email,
     required this.password,
     required this.confirmPassword,

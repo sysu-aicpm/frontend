@@ -71,7 +71,7 @@ class SettingsService {
   }
 
   /// Adds a new MCP server configuration to the state and persists the change.
-  Future<void> addMcpServer(
+  Future<String> addMcpServer(
     String name,
     String command,
     String args,
@@ -92,6 +92,8 @@ class SettingsService {
     // Persist the updated list
     await _saveCurrentMcpListState();
     debugPrint("SettingsService: Added MCP Server '${newServer.name}'.");
+
+    return newServer.id;
   }
 
   /// Updates an existing MCP server configuration in the state and persists.

@@ -12,11 +12,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final ApiClient _apiClient;
   final SecureStorage _secureStorage;
   final WidgetRef? _ref;
+  String? _mcpServerId;
 
-  AuthBloc(this._apiClient, this._secureStorage, [this._ref]) : super(AuthInitial()) {
+  AuthBloc(this._apiClient, this._secureStorage, [this._ref, this._mcpServerId]) : super(AuthInitial()) {
     on<AuthenticationStatusChecked>(_onAuthenticationStatusChecked);
     on<LoginRequested>(_onLoginRequested);
     on<LogoutRequested>(_onLogoutRequested);
+    on<RegisterRequested>(_onRegisterRequested);
   }
 
   Future<void> _onAuthenticationStatusChecked(
@@ -83,13 +85,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
 
       final pyScripName = 'mcp_server.py';
-      _ref?.read(settingsServiceProvider)
-        .addMcpServer(
-          "aicpm",
-          "python",
-          "$pyScripName --backend ${Env.apiUrl} --token $token",
-          {}
-        );
+      SettingsService? service = _ref?.read(settingsServiceProvider);
+      _mcpServerId = await service?.addMcpServer(
+        "aicpm",
+        "python",
+        "$pyScripName --backend ${Env.apiUrl} --token $token",
+        {}
+      );
 
       emit(Authenticated(user: user));
     } catch (e) {
@@ -103,6 +105,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(AuthLoading());
     await _secureStorage.deleteToken();
+    _ref?.read(settingsServiceProvider)
+      .deleteMcpServer(_mcpServerId!);
     emit(Unauthenticated());
   }
-} 
+
+  Future<void> _onRegisterRequested(
+    RegisterRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthLoading());
+    try {
+      if (event.password != event.confirmPassword) {
+        throw Exception("密码不一致");
+      }
+      final userInfoResponse = await _apiClient.register(event.email, event.password, event.username);
+      if ( !userInfoResponse.data['success'] ) {
+        throw Exception(userInfoResponse.data['message']);
+      }
+
+      emit(RegistrationSuccessful());  // 需要回到登录界面
+    } catch (e) {
+      emit(AuthFailure(error: 'Failed to register! $e'));
+    }
+  }
+}

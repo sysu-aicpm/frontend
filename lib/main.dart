@@ -73,7 +73,7 @@ class AppNavigator extends StatelessWidget {
         if (state is Authenticated) {
           return HomePage(isStaff: state.user.isStaff);
         }
-        if (state is Unauthenticated || state is AuthFailure) {
+        if (state is Unauthenticated || state is AuthFailure || state is RegistrationSuccessful) {
           return const LoginPage();
         }
         // Show a loading screen while checking auth status

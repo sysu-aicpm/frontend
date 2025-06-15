@@ -34,10 +34,11 @@ class ApiClient {
   }
 
   // TODO: 补充 first_name last_name
-  Future<Response> register(String email, String password) {
+  Future<Response> register(String email, String password, String username) {
     return _dio.post('/auth/register/', data: {
       'email': email,
       'password': password,
+      'username': username,
     });
   }
 
