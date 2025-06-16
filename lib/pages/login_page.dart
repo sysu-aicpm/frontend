@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home_app/bloc/auth/bloc.dart';
 import 'package:smart_home_app/bloc/auth/event.dart';
 import 'package:smart_home_app/bloc/auth/state.dart';
+import 'package:smart_home_app/pages/api_url_setting_page.dart';
 import 'package:smart_home_app/pages/home_page.dart';
 import 'package:smart_home_app/pages/register_page.dart';
 
@@ -229,6 +230,27 @@ class _LoginPageState extends State<LoginPage> {
             ),
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () =>  Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const ApiUrlSettingPage(),
+          ),
+        ),
+        backgroundColor: Colors.blue[600],
+        foregroundColor: Colors.white,
+        elevation: 4,
+        icon: const Icon(Icons.add_rounded, size: 20),
+        label: const Text(
+          '设置后端 API URL',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+          ),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
       ),
     );
   }

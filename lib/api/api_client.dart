@@ -4,7 +4,7 @@ import 'package:smart_home_app/config/env.dart';
 import 'package:smart_home_app/utils/secure_storage.dart';
 
 class ApiClient {
-  final Dio _dio;
+  Dio _dio;
   final SecureStorage _secureStorage;
 
   ApiClient(this._secureStorage)
@@ -23,6 +23,21 @@ class ApiClient {
   }
 
   Dio get dio => _dio;
+
+  void setAPIURL(String url) {
+    _dio = Dio(BaseOptions(baseUrl: url));
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final token = await _secureStorage.getToken();
+          if (token != null) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
+          return handler.next(options);
+        },
+      ),
+    );
+  }
 
   // --------- Authorization ---------
 

@@ -14,6 +14,9 @@ import 'package:smart_home_app/pages/login_page.dart';
 import 'package:smart_home_app/utils/secure_storage.dart';
 
 Future<void> main() async {
+  // https://stackoverflow.com/questions/74093954/how-to-fix-no-implementation-found-for-method-getall-on-channel-plugins-flutter
+  // ignore: invalid_use_of_visible_for_testing_member
+  SharedPreferences.setMockInitialValues({});
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   final initialSettingsRepo = SettingsRepositoryImpl(prefs);
