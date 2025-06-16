@@ -240,7 +240,7 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.blue[600],
         foregroundColor: Colors.white,
         elevation: 4,
-        icon: const Icon(Icons.add_rounded, size: 20),
+        icon: const Icon(Icons.api, size: 20),
         label: const Text(
           '设置后端 API URL',
           style: TextStyle(
