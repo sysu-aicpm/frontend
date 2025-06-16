@@ -15,8 +15,7 @@ on:
       - "lib/**"
       - "pubspec.yaml"
       - "assets/**"
-      - ".github/workflows/web.yaml"
-      - "Dockerfile"
+      - ".github/workflows/ci.yaml"
 
 env:
   APP_NAME: smart_home

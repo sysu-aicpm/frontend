@@ -22,7 +22,7 @@ env:
   ORGANIZATION: sysu-aicpm
 
 jobs:
-  build-and-push-frontend:
+  build-and-push:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -53,8 +53,8 @@ jobs:
         uses: docker/build-push-action@v4
         if:  ${{ !startsWith(github.ref, 'refs/tags/v') }}
         with:
-          context: frontend
-          file: docker/Dockerfile
+          context: .
+          file: Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -63,7 +63,7 @@ jobs:
         uses: docker/build-push-action@v4
         if:  ${{ startsWith(github.ref, 'refs/tags/v') }}
         with:
-          context: frontend
+          context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
