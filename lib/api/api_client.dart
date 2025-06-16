@@ -71,7 +71,47 @@ class ApiClient {
     return _dio.get('/devices/$deviceId/detail');
   }
 
-  // TODO: 控制设备 /devices/$deviceId/control
+  Future<Response> controlDevice(num deviceId, String action, Map<String, String> parameters) {
+    return _dio.post('/devices/$deviceId/control', data: {
+      "action": action,
+      "parameters": parameters
+    });
+  }
+  
+  Future<Response> updateDeviceInfo(num deviceId, [String? name, String? description, String? brand]) {
+    var deviceInfo = {};
+    if (name != null) {
+      deviceInfo['name'] = name;
+    }
+    if (description != null) {
+      deviceInfo['name'] = description;
+    }
+    if (brand != null) {
+      deviceInfo['name'] = brand;
+    }
+    return _dio.put('/devices/$deviceId/control', data: {
+      "device_info": deviceInfo
+    });
+  }
+  
+  Future<Response> deleteDevice(num deviceId) {
+    return _dio.delete('/devices/$deviceId/');
+  }
+
+  Future<Response> addDevice(String deviceIp, String devicePort) {
+    return _dio.post('/devices/', data: {
+      "device_ip": deviceIp,
+      "device_port": devicePort
+    });
+  }
+  
+  Future<Response> syncDevice(num deviceId) {
+    return _dio.post('/devices/sync/');
+  }
+  
+  Future<Response> discoverDevice(num deviceId) {
+    return _dio.post('/devices/discover/');
+  }
 
   // --------- Admin Management ---------
   // 以下部分仅限 is_staff 的管理员用户可调用
