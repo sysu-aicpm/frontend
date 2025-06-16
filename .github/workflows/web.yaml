@@ -48,7 +48,7 @@ jobs:
       
       - name: Download MCP Server
         run: |
-          curl -H "Authorization: token ${TOKEN}" https://github.com/sysu-aicpm/mcp-server/releases/download/v0.0.1/mcp_server
+          curl -o ./mcp_server https://github.com/sysu-aicpm/mcp-server/releases/download/v0.0.1/mcp_server
 
       - name: Log in to the Container registry
         uses: docker/login-action@v2
