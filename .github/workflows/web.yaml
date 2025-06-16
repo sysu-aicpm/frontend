@@ -46,9 +46,7 @@ jobs:
       - name: Build web
         run: flutter build web --release
       
-      - name: get file
-        env:
-          TOKEN: ${{ secrets.GITHUB_TOKENn }}
+      - name: Download MCP Server
         run: |
           curl -H "Authorization: token ${TOKEN}" https://github.com/sysu-aicpm/mcp-server/releases/download/v0.0.1/mcp_server
 

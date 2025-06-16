@@ -19,9 +19,10 @@ on:
 
 env:
   APP_NAME: smart_home
+  MCP_SERVER_BIN: https://github.com/sysu-aicpm/mcp-server/releases/download/v0.0.1/mcp_server
 
 jobs:
-  linux:
+  linux_android:
     runs-on: ubuntu-latest
 
     steps:
@@ -39,6 +40,8 @@ jobs:
         run: flutter config --enable-linux-desktop
       - name: Build artifacts
         run: flutter build linux --release
+      - name: Download MCP Server
+        run: curl -o ./build/linux/x64/release/bundle/mcp_server ${{ env.MCP_SERVER_BIN }}_linux
       - name: Package Release
         uses: thedoctor0/zip-release@master
         with:
@@ -89,6 +92,8 @@ jobs:
         run: flutter config --enable-windows-desktop
       - name: Build artifacts
         run: flutter build windows --release
+      - name: Download MCP Server
+        run: curl -o ./build/windows/x64/runner/Release/mcp_server ${{ env.MCP_SERVER_BIN }}_win
       - name: Package Release
         uses: thedoctor0/zip-release@master
         with:
@@ -104,7 +109,7 @@ jobs:
           tag_name: ${{github.ref_name}}
           files: build/windows/x64/runner/Release/${{env.APP_NAME}}_${{github.ref_name}}_win.zip
 
-  macos:
+  mac_ios:
     runs-on: macos-latest
 
     steps:
@@ -120,6 +125,8 @@ jobs:
       #   run: flutter config --enable-macos-desktop
       # - name: Build artifacts
       #   run: flutter build macos --release
+      # - name: Download MCP Server
+      #   run: curl -o ./build/macos/Build/Products/Release/mcp_server ${{ env.MCP_SERVER_BIN }}_mac
       # - name: Package Release
       #   uses: thedoctor0/zip-release@master
       #   with:

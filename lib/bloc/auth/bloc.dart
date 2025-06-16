@@ -40,12 +40,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           isStaff: json['is_staff'] ?? false,
         );
 
-        final pyScripName = 'mcp_server.py';
+        final mcpBinName = 'mcp_server';
         _ref?.read(settingsServiceProvider)
           .addMcpServer(
             "aicpm",
-            "python",
-            "$pyScripName --backend ${Env.apiUrl} --token $token",
+            mcpBinName,
+            "--backend ${Env.apiUrl} --token $token",
             {}
           );
 
@@ -84,12 +84,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         isStaff: json['is_staff'] ?? false,
       );
 
-      final pyScripName = 'mcp_server.py';
+      final mcpBinName = 'mcp_server';
       SettingsService? service = _ref?.read(settingsServiceProvider);
       _mcpServerId = await service?.addMcpServer(
         "aicpm",
-        "python",
-        "$pyScripName --backend ${Env.apiUrl} --token $token",
+        mcpBinName,
+        "--backend ${Env.apiUrl} --token $token",
         {}
       );
 
