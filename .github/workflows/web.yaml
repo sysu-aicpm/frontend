@@ -2,9 +2,19 @@ name: Build and publish docker of web app
 
 on:
   push:
-    branches: [ "main", "master", "ci-test" ]
-    tags: [ "v*" ]
-    paths: ["lib/**", "pubspec.yaml", "assets/**", "web/**"]
+    branches: 
+      - "main"
+      - "master"
+      - "ci-test"
+    tags: 
+      - "v*"
+    paths: 
+      - "lib/**"
+      - "pubspec.yaml"
+      - "assets/**"
+      - ".github/workflows/web.yaml"
+      - "Dockerfile"
+      - "web/**"
 
 env:
   REGISTRY: ghcr.io

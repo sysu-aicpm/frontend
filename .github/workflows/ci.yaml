@@ -5,9 +5,18 @@ permissions:
 
 on:
   push:
-    branches: [ "main", "master", "ci-test" ]
-    tags: [ "v*" ]
-    paths: ["lib/**", "pubspec.yaml", "assets/**"]
+    branches: 
+      - "main"
+      - "master"
+      - "ci-test"
+    tags: 
+      - "v*"
+    paths: 
+      - "lib/**"
+      - "pubspec.yaml"
+      - "assets/**"
+      - ".github/workflows/web.yaml"
+      - "Dockerfile"
 
 env:
   APP_NAME: smart_home
