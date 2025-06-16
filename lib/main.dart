@@ -58,9 +58,22 @@ class MyApp extends ConsumerWidget {
         child: MaterialApp(
           title: 'Smart Home App',
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.blue,
+              background: Colors.grey.shade100,
+            ),
+            useMaterial3: true,
             fontFamily: 'LxgwWenkaiGb',
           ),
+          darkTheme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.blue,
+              brightness: Brightness.dark,
+            ),
+            useMaterial3: true,
+            fontFamily: 'LxgwWenkaiGb',
+          ),
+          themeMode: ThemeMode.system,
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
