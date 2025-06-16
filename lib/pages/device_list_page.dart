@@ -8,15 +8,23 @@ import 'package:smart_home_app/bloc/device_list/state.dart';
 import 'package:smart_home_app/pages/device_detail_page.dart';
 import 'package:smart_home_app/utils/styles.dart';
 
-class DeviceListPage extends StatelessWidget {
+class DeviceListPage extends StatefulWidget {
   const DeviceListPage({super.key});
 
   @override
+  State<DeviceListPage> createState() => _DeviceListPageState();
+}
+
+class _DeviceListPageState extends State<DeviceListPage> {
+  List<FakeDevice> fakeDevices = [];
+
+  @override
   Widget build(BuildContext context) {
+    final bloc = DeviceListBloc(
+      RepositoryProvider.of<ApiClient>(context),
+    );
     return BlocProvider(
-      create: (context) => DeviceListBloc(
-        RepositoryProvider.of<ApiClient>(context),
-      )..add(LoadDeviceList()),
+      create: (context) => bloc..add(LoadDeviceList()),
       child: BlocBuilder<DeviceListBloc, DeviceListState>(
         builder: (context, state) {
           if (state is DeviceListInProgress) {
@@ -26,6 +34,9 @@ class DeviceListPage extends StatelessWidget {
             final devices = state.devices;
             if (devices.isEmpty) {
               return const Center(child: Text('No devices found.'));
+            }
+            if (fakeDevices.isEmpty) {
+              fakeDevices = devices.map((_) => FakeDevice()).toList();
             }
             return LayoutBuilder(
               builder: (context, constraints) {
@@ -58,7 +69,8 @@ class DeviceListPage extends StatelessWidget {
                   itemCount: devices.length,
                   itemBuilder: (context, index) {
                     final device = devices[index];
-                    return _buildDeviceCard(device, context);
+                    final fakeDevice = fakeDevices[index];
+                    return _buildDeviceCard(bloc, context, device, fakeDevice);
                   },
                 );
               },
@@ -74,8 +86,16 @@ class DeviceListPage extends StatelessWidget {
   }
 }
 
-// 添加这个方法来构建单个设备卡片
-Widget _buildDeviceCard(Device device, BuildContext context) {
+class FakeDevice {
+  bool isOn = false;
+  void toggle() {
+    isOn = !isOn;
+  }
+}
+
+Widget _buildDeviceCard(
+    DeviceListBloc bloc, BuildContext context,
+    Device device, FakeDevice fakeDevice) {
   return Card(
     elevation: 4,
     shadowColor: Colors.black.withValues(alpha: 0.1),
@@ -94,9 +114,8 @@ Widget _buildDeviceCard(Device device, BuildContext context) {
       child: Container(
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: Colors.blueGrey.withValues(alpha: 0.1)
-        ),
+            borderRadius: BorderRadius.circular(16),
+            color: Colors.blueGrey.withValues(alpha: 0.1)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -110,7 +129,7 @@ Widget _buildDeviceCard(Device device, BuildContext context) {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: device.isOnline 
+                    color: device.isOnline
                         ? Colors.green.withValues(alpha: 0.1)
                         : Colors.red.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
@@ -145,19 +164,21 @@ Widget _buildDeviceCard(Device device, BuildContext context) {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // 设备图标
             Center(
               child: Container(
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: getDeviceTypeColor(device.type).withValues(alpha: 0.1),
+                  color:
+                      getDeviceTypeColor(device.type).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: getDeviceTypeColor(device.type).withValues(alpha: 0.2),
+                    color:
+                        getDeviceTypeColor(device.type).withValues(alpha: 0.2),
                     width: 1,
                   ),
                 ),
@@ -168,9 +189,9 @@ Widget _buildDeviceCard(Device device, BuildContext context) {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // 设备名称
             Center(
               child: Text(
@@ -182,11 +203,11 @@ Widget _buildDeviceCard(Device device, BuildContext context) {
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-              )
+              ),
             ),
-            
+
             const SizedBox(height: 4),
-            
+
             // 设备类型
             Center(
               child: Text(
@@ -196,8 +217,26 @@ Widget _buildDeviceCard(Device device, BuildContext context) {
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
                 ),
-              )
-            )
+              ),
+            ),
+            
+            const SizedBox(height: 8),
+
+            // 假开关控制
+            Center(
+              child: Switch.adaptive( // 使用 adaptive 可以根据平台自适应样式
+                value: fakeDevice.isOn,
+                onChanged: (bool newValue) {
+                  if(device.isOnline) {  // 在线设备才能控制
+                    fakeDevice.toggle();
+                    bloc.add(LoadDeviceList());
+                  }
+                },
+                activeColor: Colors.blueAccent, // 开关开启时的颜色
+                inactiveThumbColor: Colors.grey, // 开关关闭时滑块的颜色
+                inactiveTrackColor: Colors.grey.withValues(alpha: 0.3), // 开关关闭时轨道的颜色
+              ),
+            ),
           ],
         ),
       ),
