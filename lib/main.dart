@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_home_app/api/api_client.dart';
@@ -55,7 +56,17 @@ class MyApp extends ConsumerWidget {
           title: 'Smart Home App',
           theme: ThemeData(
             primarySwatch: Colors.blue,
+            fontFamily: 'LxgwWenkaiGb',
           ),
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en', ''), 
+            Locale('zh', 'Hans'), 
+          ],
           home: const AppNavigator(),
         ),
       ),
