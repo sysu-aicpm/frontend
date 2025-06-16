@@ -45,10 +45,8 @@ class _UserPermissionPageState extends State<UserPermissionPage> with TickerProv
       RepositoryProvider.of<ApiClient>(context),
     );
     return Scaffold(
-      backgroundColor: Colors.grey[50],
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
         foregroundColor: Colors.grey[600],
         title: const Text(
           '权限管理',
@@ -62,7 +60,6 @@ class _UserPermissionPageState extends State<UserPermissionPage> with TickerProv
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.grey[100],
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: TextField(
@@ -87,8 +84,6 @@ class _UserPermissionPageState extends State<UserPermissionPage> with TickerProv
               const SizedBox(height: 16),
               TabBar(
                 controller: _tabController,
-                labelColor: Theme.of(context).primaryColor,
-                unselectedLabelColor: Colors.grey,
                 indicatorWeight: 3,
                 tabs: const [
                   Tab(
@@ -236,7 +231,6 @@ class _UserPermissionPageState extends State<UserPermissionPage> with TickerProv
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -323,7 +317,6 @@ class _UserPermissionPageState extends State<UserPermissionPage> with TickerProv
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -399,9 +392,7 @@ class _UserPermissionPageState extends State<UserPermissionPage> with TickerProv
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.grey[50],
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey[200]!),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<PermissionLevel>(

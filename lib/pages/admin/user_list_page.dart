@@ -16,7 +16,6 @@ class UserListPage extends StatelessWidget {
       RepositoryProvider.of<ApiClient>(context),
     );
     return Scaffold(
-      backgroundColor: Colors.grey[50],
       body: BlocProvider(
         create: (context) => bloc..add(LoadUserList()),
         child: BlocConsumer<UserListBloc, UserListState>(
@@ -92,7 +91,9 @@ class UserListPage extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: Colors.grey[300],
+                    color: user.isStaff
+                      ? Colors.purple[300]?.withAlpha(100)
+                      : Colors.blue[300]?.withAlpha(100),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -102,7 +103,7 @@ class UserListPage extends StatelessWidget {
                     color: user.isStaff 
                       ? Colors.purple[300]
                       : Colors.blue[300],
-                    size: 20,
+                    size: 32,
                   )
                 ),
                 const SizedBox(width: 16),
@@ -115,7 +116,6 @@ class UserListPage extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black87,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

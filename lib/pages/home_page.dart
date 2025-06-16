@@ -64,11 +64,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Image.asset(
+        title: Center(child: Image.asset(
           'assets/aicpm.png',
           height: 60,
           fit: BoxFit.contain,
-        ),
+        )),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),

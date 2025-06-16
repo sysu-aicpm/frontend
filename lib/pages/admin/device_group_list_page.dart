@@ -16,7 +16,6 @@ class DeviceGroupListPage extends StatelessWidget {
       RepositoryProvider.of<ApiClient>(context),
     );
     return Scaffold(
-      backgroundColor: Colors.grey[50],
       body: BlocProvider(
         create: (context) => bloc..add(LoadDeviceGroupList()),
         child: BlocConsumer<DeviceGroupListBloc, DeviceGroupListState>(
@@ -116,13 +115,13 @@ class DeviceGroupListPage extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: Colors.grey[300],
+                    color: Colors.purple.withAlpha(200),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     Icons.group_work,
-                    color: Colors.grey[600],
-                    size: 24,
+                    color: Colors.white.withAlpha(200),
+                    size: 32,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -135,7 +134,6 @@ class DeviceGroupListPage extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black87,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -213,13 +211,13 @@ class DeviceGroupListPage extends StatelessWidget {
               width: 120,
               height: 120,
               decoration: BoxDecoration(
-                color: Colors.grey[100],
+                color: Colors.purple.withAlpha(200),
                 borderRadius: BorderRadius.circular(24),
               ),
               child: Icon(
                 Icons.group_work,
                 size: 48,
-                color: Colors.grey[400],
+                color: Colors.white.withAlpha(200),
               ),
             ),
             const SizedBox(height: 24),

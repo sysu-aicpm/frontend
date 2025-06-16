@@ -173,12 +173,10 @@ Widget _buildDeviceCard(
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color:
-                      getDeviceTypeColor(device.type).withValues(alpha: 0.1),
+                  color: getDeviceTypeColor(device.type).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color:
-                        getDeviceTypeColor(device.type).withValues(alpha: 0.2),
+                    color: getDeviceTypeColor(device.type),
                     width: 1,
                   ),
                 ),
@@ -199,7 +197,6 @@ Widget _buildDeviceCard(
                 style: const TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
-                  color: Color(0xFF1A1A1A),
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

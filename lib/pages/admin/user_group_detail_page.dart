@@ -21,7 +21,6 @@ class UserGroupDetailPage extends StatelessWidget {
       create: (context) => UserGroupBloc(context.read<ApiClient>())
         ..add(LoadUserGroupDetail(userGroup)),
       child: Scaffold(
-        backgroundColor: Colors.grey[50],
         body: CustomScrollView(
           slivers: [
             _buildSliverAppBar(context),
@@ -50,12 +49,10 @@ class UserGroupDetailPage extends StatelessWidget {
       expandedHeight: 200,
       floating: false,
       pinned: true,
-      backgroundColor: Colors.grey[300],
       flexibleSpace: FlexibleSpaceBar(
         title: Text(
           userGroup.name,
           style: const TextStyle(
-            color: Colors.white,
             fontWeight: FontWeight.bold,
             shadows: [
               Shadow(
@@ -67,21 +64,12 @@ class UserGroupDetailPage extends StatelessWidget {
           ),
         ),
         background: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Colors.grey[300]!,
-                Colors.grey[400]!,
-              ],
-            ),
-          ),
+          decoration: BoxDecoration(),
           child: Center(
             child: Icon(
               Icons.groups,
               size: 80,
-              color: Colors.grey[600],
+              color: Colors.blue.withAlpha(200),
             ),
           ),
         ),
@@ -324,16 +312,16 @@ class UserGroupDetailPage extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: Colors.grey[50],
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey[200]!),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.grey[300],
+            color: user.isStaff 
+              ? Colors.purple[300]?.withAlpha(100)
+              : Colors.blue[300]?.withAlpha(100),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(

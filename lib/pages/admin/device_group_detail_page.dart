@@ -6,6 +6,7 @@ import 'package:smart_home_app/api/models/device_group.dart';
 import 'package:smart_home_app/bloc/device_group/bloc.dart';
 import 'package:smart_home_app/bloc/device_group/event.dart';
 import 'package:smart_home_app/bloc/device_group/state.dart';
+import 'package:smart_home_app/utils/styles.dart';
 
 class DeviceGroupDetailPage extends StatelessWidget {
   final DeviceGroup deviceGroup;
@@ -21,7 +22,6 @@ class DeviceGroupDetailPage extends StatelessWidget {
       create: (context) => DeviceGroupBloc(context.read<ApiClient>())
         ..add(LoadDeviceGroupDetail(deviceGroup)),
       child: Scaffold(
-        backgroundColor: Colors.grey[50],
         body: CustomScrollView(
           slivers: [
             _buildSliverAppBar(context),
@@ -50,12 +50,10 @@ class DeviceGroupDetailPage extends StatelessWidget {
       expandedHeight: 200,
       floating: false,
       pinned: true,
-      backgroundColor: Colors.grey[300],
       flexibleSpace: FlexibleSpaceBar(
         title: Text(
           deviceGroup.name,
           style: const TextStyle(
-            color: Colors.white,
             fontWeight: FontWeight.bold,
             shadows: [
               Shadow(
@@ -67,21 +65,12 @@ class DeviceGroupDetailPage extends StatelessWidget {
           ),
         ),
         background: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Colors.grey[300]!,
-                Colors.grey[400]!,
-              ],
-            ),
-          ),
+          decoration: BoxDecoration(),
           child: Center(
             child: Icon(
               Icons.group_work,
               size: 80,
-              color: Colors.grey[600],
+              color: Colors.purple.withAlpha(200),
             ),
           ),
         ),
@@ -210,7 +199,6 @@ class DeviceGroupDetailPage extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.grey[300],
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Icon(
@@ -273,7 +261,6 @@ class DeviceGroupDetailPage extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.grey[300],
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Icon(
@@ -324,21 +311,20 @@ class DeviceGroupDetailPage extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: Colors.grey[50],
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey[200]!),
+        border: Border.all(),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: device.isOnline ? Colors.green[100] : Colors.red[100],
+            color: getDeviceTypeColor(device.type).withAlpha(100),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
-            Icons.group_work,
-            color: device.isOnline ? Colors.green[600] : Colors.red[600],
+            getDeviceTypeIcon(device.type),
+            color: getDeviceTypeColor(device.type),
             size: 20,
           ),
         ),
