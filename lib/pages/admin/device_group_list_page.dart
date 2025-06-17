@@ -346,8 +346,9 @@ class DeviceGroupListPage extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        title: const Row(
+        title: Row(
           children: [
+            Spacer(),
             Icon(
               Icons.add_circle_outline_rounded,
               color: Colors.blue,
@@ -355,12 +356,19 @@ class DeviceGroupListPage extends StatelessWidget {
             ),
             SizedBox(width: 12),
             Text(
-              'Create Device Group',
+              '新设备组',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
             ),
+            SizedBox(width: 24),
+            Center(child: Image.asset(
+              'assets/images/taffy/96.png',
+              height: 160,
+              fit: BoxFit.contain,
+            )),
+            Spacer(),
           ],
         ),
         content: Form(
@@ -460,8 +468,9 @@ class DeviceGroupListPage extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        title: const Row(
+        title: Row(
           children: [
+            Spacer(),
             Icon(
               Icons.warning_amber_rounded,
               color: Colors.orange,
@@ -475,6 +484,13 @@ class DeviceGroupListPage extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
+            SizedBox(width: 24),
+            Center(child: Image.asset(
+              'assets/images/taffy/107.png',
+              height: 160,
+              fit: BoxFit.contain,
+            )),
+            Spacer(),
           ],
         ),
         content: RichText(
@@ -490,7 +506,6 @@ class DeviceGroupListPage extends StatelessWidget {
                 text: '"${deviceGroup.name}"',
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: Colors.black87,
                 ),
               ),
               const TextSpan(text: '? This action cannot be undone.'),
