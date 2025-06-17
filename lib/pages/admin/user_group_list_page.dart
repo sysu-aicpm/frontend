@@ -161,7 +161,7 @@ class UserGroupListPage extends StatelessWidget {
                     if (value == 'delete') {
                       _showDeleteConfirmationDialog(context, userGroup);
                     }
-                    if (value == 'permission') {               
+                    if (value == 'permission') {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => UserGroupPermissionPage(userGroupId: userGroup.id),

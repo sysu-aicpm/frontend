@@ -29,3 +29,16 @@ class DeviceListSuccess extends DeviceListState {
   @override
   List<Object> get props => [devices];
 }
+
+class DiscoverNewDeviceSuccess extends DeviceListState {
+  final List<NewDeviceData> datas;
+  final bool newDeviceAdded;
+
+  const DiscoverNewDeviceSuccess({
+    required this.datas,
+    required this.newDeviceAdded
+  });
+
+  @override
+  List<Object> get props => [datas];
+}

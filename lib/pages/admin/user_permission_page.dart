@@ -417,7 +417,7 @@ class _UserPermissionPageState extends State<UserPermissionPage> with TickerProv
                   Text(
                     getPermissionLevelName(level),
                     style: TextStyle(
-                      color: Colors.grey[800],
+                      color: getPermissionLevelColor(level),
                       fontWeight: level == currentLevel
                           ? FontWeight.w600
                           : FontWeight.normal,

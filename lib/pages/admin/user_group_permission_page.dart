@@ -417,6 +417,7 @@ class _UserGroupPermissionPageState extends State<UserGroupPermissionPage> with 
                   Text(
                     getPermissionLevelName(level),
                     style: TextStyle(
+                      color: getPermissionLevelColor(level),
                       fontWeight: level == currentLevel
                           ? FontWeight.w600
                           : FontWeight.normal,

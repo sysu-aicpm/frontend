@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:smart_home_app/api/models/device.dart';
 import 'package:smart_home_app/api/models/permission.dart';
 import 'package:smart_home_app/config/env.dart';
 import 'package:smart_home_app/utils/secure_storage.dart';
@@ -105,9 +106,20 @@ class ApiClient {
     });
   }
   
-  Future<Response> syncDevice(List<Map<String, dynamic>> deviceData) {
+  Future<Response> syncDevice(NewDeviceData deviceData) {
     return _dio.post('/devices/sync/', data: {
-      "device_data": deviceData
+      "device_data": {
+        "device_identifier": deviceData.deviceIdentifier,
+        "name": deviceData.name,
+        "ip": deviceData.ip,
+        "port": deviceData.port,
+        "device_type": deviceData.deviceType.name,
+        "status": deviceData.status,
+        "power": deviceData.power,
+        "ssdp_location": deviceData.ssdpLocation,
+        "ssdp_nt": deviceData.ssdpNT,
+        "ssdp_usn": deviceData.ssdpUSN
+      }
     });
   }
   

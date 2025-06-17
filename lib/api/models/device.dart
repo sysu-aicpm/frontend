@@ -100,3 +100,39 @@ class DeviceDetail extends Equatable {
     uptimeSeconds, lastHeartbeat, logs, usageRecords
   ];
 }
+
+
+class NewDeviceData extends Equatable {
+  final String deviceIdentifier;
+  final String name;
+  final String ip;
+  final num port;
+  final DeviceType deviceType;
+  final String status;
+  final num power;
+  final String ssdpLocation;
+  final String ssdpNT;
+  final String ssdpUSN;
+  final bool alreadyAdded;
+
+  const NewDeviceData({
+    required this.deviceIdentifier,
+    required this.name,
+    required this.ip,
+    required this.port,
+    required this.deviceType,
+    required this.status,
+    required this.power,
+    required this.ssdpLocation,
+    required this.ssdpNT,
+    required this.ssdpUSN,
+    required this.alreadyAdded,
+  });
+
+  @override
+  List<Object> get props => [
+    deviceIdentifier, name, ip, port,
+    deviceType, status, power, ssdpLocation,
+    ssdpNT, ssdpUSN, alreadyAdded,
+  ];
+}

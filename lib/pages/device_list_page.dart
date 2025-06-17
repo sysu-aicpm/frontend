@@ -6,6 +6,7 @@ import 'package:smart_home_app/bloc/device_list/bloc.dart';
 import 'package:smart_home_app/bloc/device_list/event.dart';
 import 'package:smart_home_app/bloc/device_list/state.dart';
 import 'package:smart_home_app/pages/device_detail_page.dart';
+import 'package:smart_home_app/pages/discover_device_page.dart';
 import 'package:smart_home_app/utils/styles.dart';
 
 class DeviceListPage extends StatefulWidget {
@@ -43,14 +44,13 @@ class _DeviceListPageState extends State<DeviceListPage> {
   }
 
   void _navigateToDetail(BuildContext context, Device device) async {
-    final result = await Navigator.of(context).push(
+    await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => DeviceDetailPage(device: device),
       ),
     );
-    if (result == true) {
-      context.read<DeviceListBloc>().add(LoadDeviceList());
-    }
+    // 强制刷新
+    context.read<DeviceListBloc>().add(LoadDeviceList());
   }
 
   void _deleteSelectedDevices(BuildContext blocContext) {
@@ -58,8 +58,26 @@ class _DeviceListPageState extends State<DeviceListPage> {
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: const Text('移除设备'),
-          content: Text('您确定要移除选中的 ${_selectedDeviceIds.length} 个设备吗?'),
+          title: Row(
+            children: [
+              Spacer(),
+              Icon(
+                Icons.warning_amber_rounded,
+                color: Colors.orange,
+                size: 24,
+              ),
+              SizedBox(width: 12),
+              Text('移除设备'),
+              SizedBox(width: 24),
+              Center(child: Image.asset(
+                'assets/images/taffy/107.png',
+                height: 160,
+                fit: BoxFit.contain,
+              )),
+              Spacer()
+            ]
+          ),
+          content: Text('Are you sure you want to delete ${_selectedDeviceIds.length} selected devices?'),
           actions: <Widget>[
             TextButton(
               child: const Text('取消'),
@@ -93,26 +111,6 @@ class _DeviceListPageState extends State<DeviceListPage> {
       )..add(LoadDeviceList()),
       child: Builder(builder: (context) {
         return Scaffold(
-          appBar: AppBar(
-            title: const Text('我的设备'),
-            actions: [
-              if (_isSelectionMode)
-                TextButton(
-                  onPressed: _selectedDeviceIds.isEmpty ? null : () => _deleteSelectedDevices(context),
-                  child: Text(
-                    '移除 (${_selectedDeviceIds.length})',
-                    style: TextStyle(
-                      color: _selectedDeviceIds.isNotEmpty ? Colors.red : Colors.grey,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              IconButton(
-                icon: Icon(_isSelectionMode ? Icons.close : Icons.edit),
-                onPressed: _toggleSelectionMode,
-              ),
-            ],
-          ),
           body: BlocBuilder<DeviceListBloc, DeviceListState>(
             builder: (context, state) {
               if (state is DeviceListInProgress) {
@@ -135,9 +133,9 @@ class _DeviceListPageState extends State<DeviceListPage> {
                       crossAxisCount = 5;
                     } else if (constraints.maxWidth > 1200) {
                       crossAxisCount = 4;
-                    } else if (constraints.maxWidth > 800) {
+                    } else if (constraints.maxWidth > 900) {
                       crossAxisCount = 3;
-                    } else if (constraints.maxWidth > 500) {
+                    } else if (constraints.maxWidth > 600) {
                       crossAxisCount = 2;
                     } else {
                       crossAxisCount = 1;
@@ -151,11 +149,18 @@ class _DeviceListPageState extends State<DeviceListPage> {
                         mainAxisSpacing: 16,
                         childAspectRatio: 1.1,
                       ),
-                      itemCount: devices.length,
+                      itemCount: devices.length + 1,
                       itemBuilder: (context, index) {
-                        final device = devices[index];
-                        final isSelected = _selectedDeviceIds.contains(device.id);
-                        return _buildDeviceCard(context, device, _isSelectionMode, isSelected, (Device d) => _onDeviceTap(d));
+                        if (index == 0) {
+                          return _buildDiscoverDeviceCard(context);
+                        } else {
+                          final device = devices[index - 1];
+                          final isSelected = _selectedDeviceIds.contains(device.id);
+                          return _buildDeviceCard(
+                            context, device, _isSelectionMode, isSelected,
+                            (Device d) => _onDeviceTap(d)
+                          );
+                        }
                       },
                     );
                   },
@@ -167,11 +172,43 @@ class _DeviceListPageState extends State<DeviceListPage> {
               return const Center(child: Text('发生了未知错误。'));
             },
           ),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: _toggleSelectionMode,
+            backgroundColor: Colors.blue[600],
+            foregroundColor: Colors.white,
+            elevation: 4,
+            icon: IconButton(
+              icon: Icon(_isSelectionMode ? Icons.close : Icons.edit),
+              onPressed: _toggleSelectionMode,
+            ),
+            label: _isSelectionMode
+                ? TextButton(
+                    onPressed: _selectedDeviceIds.isEmpty ? null : () => _deleteSelectedDevices(context),
+                    child: Text(
+                      '移除 (${_selectedDeviceIds.length})',
+                      style: TextStyle(
+                        color: _selectedDeviceIds.isNotEmpty ? Colors.red : Colors.grey,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                : Text(
+                  '移除设备',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
         );
       }),
     );
   }
 }
+
 
 class FakeDevice {
   bool isOn = false;
@@ -179,6 +216,70 @@ class FakeDevice {
     isOn = !isOn;
   }
 }
+
+
+Widget _buildDiscoverDeviceCard(BuildContext context) {
+
+  void navigateToDiscover() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => DeviceDiscoveryPage(),
+      ),
+    );
+    // 强制刷新
+    context.read<DeviceListBloc>().add(LoadDeviceList());
+  }
+  
+  return Card(
+    elevation: 4,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(16),
+    ),
+    child: InkWell(
+      onTap: navigateToDiscover,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.blue.withAlpha(50),
+        ),
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Spacer(),
+                Center(
+                  child: Icon(
+                    Icons.add_circle_outline,
+                    color: Colors.blue.withAlpha(200),
+                    size: 56
+                  ),
+                ),
+                SizedBox(height: 24),
+                Center(
+                  child: Text(
+                    "发现新设备",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      color: Colors.blue.withAlpha(200),
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Spacer(),
+              ]
+            )
+          ]
+        )
+      )
+    )
+  );
+}
+
 
 Widget _buildDeviceCard(BuildContext context, Device device, bool isSelectionMode, bool isSelected, Function(Device) onTap) {
   bool isOn = false;
