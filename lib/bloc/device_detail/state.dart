@@ -1,4 +1,3 @@
-
 import 'package:equatable/equatable.dart';
 import 'package:smart_home_app/api/models/device.dart';
 
@@ -30,3 +29,5 @@ class DeviceDetailSuccess extends DeviceDetailState {
   @override
   List<Object> get props => [detail];
 }
+
+class DeviceDetailUpdateSuccess extends DeviceDetailState {}
