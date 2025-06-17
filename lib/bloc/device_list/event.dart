@@ -8,3 +8,12 @@ abstract class DeviceListEvent extends Equatable {
 }
 
 class LoadDeviceList extends DeviceListEvent {}
+
+class DeleteDevice extends DeviceListEvent {
+  final int deviceId;
+
+  const DeleteDevice(this.deviceId);
+
+  @override
+  List<Object> get props => [deviceId];
+}

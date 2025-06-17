@@ -11,6 +11,7 @@ import 'package:smart_home_app/flutter_chat_desktop/domains/settings/data/settin
 import 'package:smart_home_app/flutter_chat_desktop/providers/settings_providers.dart';
 import 'package:smart_home_app/pages/home_page.dart';
 import 'package:smart_home_app/pages/login_page.dart';
+import 'package:smart_home_app/providers/theme_provider.dart';
 import 'package:smart_home_app/utils/secure_storage.dart';
 
 Future<void> main() async {
@@ -46,6 +47,7 @@ class MyApp extends ConsumerWidget {
     // Create instances of the dependencies
     final SecureStorage secureStorage = SecureStorage();
     final ApiClient apiClient = ApiClient(secureStorage);
+    final themeMode = ref.watch(themeProvider);
 
     return RepositoryProvider.value(
       value: apiClient,
@@ -73,7 +75,7 @@ class MyApp extends ConsumerWidget {
             useMaterial3: true,
             fontFamily: 'LxgwWenkaiGb',
           ),
-          themeMode: ThemeMode.system,
+          themeMode: themeMode,
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,

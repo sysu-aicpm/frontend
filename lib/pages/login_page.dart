@@ -7,6 +7,7 @@ import 'package:smart_home_app/bloc/auth/state.dart';
 import 'package:smart_home_app/pages/api_url_setting_page.dart';
 import 'package:smart_home_app/pages/home_page.dart';
 import 'package:smart_home_app/pages/register_page.dart';
+import 'package:smart_home_app/widgets/theme_toggle_button.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,6 +23,11 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: const ThemeToggleButton(),
+        title: const Text(''),
+        actions: const [],
+      ),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthFailure) {

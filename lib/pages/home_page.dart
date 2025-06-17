@@ -9,6 +9,7 @@ import 'package:smart_home_app/pages/admin/user_group_list_page.dart';
 import 'package:smart_home_app/pages/admin/user_list_page.dart';
 import 'package:smart_home_app/pages/device_list_page.dart';
 import 'package:smart_home_app/pages/login_page.dart';
+import 'package:smart_home_app/widgets/theme_toggle_button.dart';
 
 class HomePage extends StatefulWidget {
   final bool isStaff;
@@ -75,6 +76,7 @@ class _HomePageState extends State<HomePage> {
       },
       child: Scaffold(
         appBar: AppBar(
+          leading: const ThemeToggleButton(),
           title: Center(child: Image.asset(
             'assets/images/aicpm.png',
             height: 60,

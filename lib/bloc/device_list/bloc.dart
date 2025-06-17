@@ -9,6 +9,21 @@ class DeviceListBloc extends Bloc<DeviceListEvent, DeviceListState> {
 
   DeviceListBloc(this._apiClient) : super(DeviceListInitial()) {
     on<LoadDeviceList>(_onLoadDeviceList);
+    on<DeleteDevice>(_onDeleteDevice);
+  }
+
+  Future<void> _onDeleteDevice(
+    DeleteDevice event,
+    Emitter<DeviceListState> emit,
+  ) async {
+    try {
+      await _apiClient.deleteDevice(event.deviceId);
+      add(LoadDeviceList()); // Refresh the list
+    } catch (e) {
+      // Optionally, handle specific delete errors
+      emit(DeviceListFailure(error: 'Failed to delete device. $e'));
+      add(LoadDeviceList()); // Still refresh list on failure to get latest state
+    }
   }
 
   Future<void> _onLoadDeviceList(
