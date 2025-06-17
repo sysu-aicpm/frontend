@@ -1,4 +1,3 @@
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home_app/api/api_client.dart';
 import 'package:smart_home_app/api/models/device.dart';
@@ -10,6 +9,7 @@ class DeviceDetailBloc extends Bloc<DeviceDetailEvent, DeviceDetailState> {
 
   DeviceDetailBloc(this._apiClient) : super(DeviceDetailInitial()) {
     on<LoadDeviceDetail>(_onLoadDeviceDetail);
+    on<UpdateDeviceInfo>(_onUpdateDeviceInfo);
   }
 
   Future<void> _onLoadDeviceDetail(
@@ -54,6 +54,27 @@ class DeviceDetailBloc extends Bloc<DeviceDetailEvent, DeviceDetailState> {
       )));
     } catch (e) {
       emit(DeviceDetailFailure(error: 'Failed to load devices. $e'));
+    }
+  }
+
+  Future<void> _onUpdateDeviceInfo(
+    UpdateDeviceInfo event,
+    Emitter<DeviceDetailState> emit,
+  ) async {
+    emit(DeviceDetailInProgress());
+    try {
+      final id = num.parse(event.deviceId);
+      await _apiClient.updateDeviceInfo(
+        id,
+        event.name,
+        event.description,
+        event.brand,
+      );
+      emit(DeviceDetailUpdateSuccess());
+      // Refresh details
+      add(LoadDeviceDetail(event.deviceId));
+    } catch (e) {
+      emit(DeviceDetailFailure(error: 'Failed to update device info. $e'));
     }
   }
 }

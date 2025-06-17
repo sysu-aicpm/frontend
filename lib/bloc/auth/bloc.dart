@@ -105,8 +105,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(AuthLoading());
     await _secureStorage.deleteToken();
-    _ref?.read(settingsServiceProvider)
-      .deleteMcpServer(_mcpServerId!);
+    if (_mcpServerId != null) {
+      _ref?.read(settingsServiceProvider)
+        .deleteMcpServer(_mcpServerId!);
+    }
     emit(Unauthenticated());
   }
 

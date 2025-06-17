@@ -16,6 +16,7 @@ class DeviceDetailPage extends StatefulWidget {
 }
 
 class DeviceDetailWidgetState extends State<DeviceDetailPage> {
+  late Device _device;
   bool _showLogs = false;
   bool _showUsageRecords = false;
   
@@ -27,21 +28,47 @@ class DeviceDetailWidgetState extends State<DeviceDetailPage> {
   int _currentRecordsPage = 1;
 
   @override
+  void initState() {
+    super.initState();
+    _device = widget.device;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => DeviceDetailBloc(
         RepositoryProvider.of<ApiClient>(context),
-      )..add(LoadDeviceDetail(widget.device.id)),
+      )..add(LoadDeviceDetail(_device.id)),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.device.name),
+          title: Text(_device.name),
+          actions: [
+            BlocBuilder<DeviceDetailBloc, DeviceDetailState>(
+              builder: (context, state) {
+                if (state is DeviceDetailSuccess) {
+                  return IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () => _showEditDeviceDialog(context, state.detail),
+                  );
+                }
+                return Container();
+              },
+            ),
+          ],
         ),
         body: BlocConsumer<DeviceDetailBloc, DeviceDetailState>(
           listener: (context, state) {
-            if (state is DeviceDetailSuccess) {
+            if (state is DeviceDetailUpdateSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("获取监控信息成功"), backgroundColor: Colors.green),
+                const SnackBar(content: Text("设备信息更新成功"), backgroundColor: Colors.green),
               );
+            }
+            if (state is DeviceDetailSuccess) {
+              // Potentially update local device representation if name changes
+              if (state.detail.identifier != _device.name) {
+                // This is a bit of a hack. The name is not in DeviceDetail model.
+                // We'll rely on the parent list to be updated.
+              }
             }
             if (state is DeviceDetailFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -59,11 +86,11 @@ class DeviceDetailWidgetState extends State<DeviceDetailPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Device ID: ${widget.device.id}', style: const TextStyle(fontSize: 16)),
+                      Text('Device ID: ${_device.id}', style: const TextStyle(fontSize: 16)),
                       const SizedBox(height: 8),
-                      Text('Type: ${widget.device.type}', style: const TextStyle(fontSize: 16)),
+                      Text('Type: ${_device.type}', style: const TextStyle(fontSize: 16)),
                       const SizedBox(height: 8),
-                      Text('Status: ${widget.device.isOnline ? 'Online' : 'Offline'}', style: const TextStyle(fontSize: 16)),
+                      Text('Status: ${_device.isOnline ? 'Online' : 'Offline'}', style: const TextStyle(fontSize: 16)),
                     ],
                   ),
                 ),
@@ -316,6 +343,74 @@ class DeviceDetailWidgetState extends State<DeviceDetailPage> {
           ),
         ],
       ),
+    );
+  }
+
+  Future<bool?> _showEditDeviceDialog(BuildContext context, DeviceDetail detail) {
+    final nameController = TextEditingController(text: _device.name);
+    final brandController = TextEditingController(text: detail.brand);
+    final descriptionController = TextEditingController(text: detail.description);
+
+    return showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('Edit Device Info'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: nameController,
+                  decoration: const InputDecoration(labelText: 'Name'),
+                ),
+                TextField(
+                  controller: brandController,
+                  decoration: const InputDecoration(labelText: 'Brand'),
+                ),
+                TextField(
+                  controller: descriptionController,
+                  decoration: const InputDecoration(labelText: 'Description'),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                final name = nameController.text;
+                final brand = brandController.text;
+                final description = descriptionController.text;
+
+                // Update local state for immediate feedback
+                setState(() {
+                  _device = Device(
+                    id: _device.id,
+                    name: name,
+                    type: _device.type,
+                    isOnline: _device.isOnline,
+                  );
+                });
+
+                BlocProvider.of<DeviceDetailBloc>(context).add(
+                  UpdateDeviceInfo(
+                    _device.id,
+                    name: name,
+                    brand: brand,
+                    description: description,
+                  ),
+                );
+                Navigator.of(dialogContext).pop(true);
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

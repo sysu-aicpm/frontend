@@ -16,8 +16,6 @@ class DeviceListPage extends StatefulWidget {
 }
 
 class _DeviceListPageState extends State<DeviceListPage> {
-  List<FakeDevice> fakeDevices = [];
-
   @override
   Widget build(BuildContext context) {
     final bloc = DeviceListBloc(
@@ -34,9 +32,6 @@ class _DeviceListPageState extends State<DeviceListPage> {
             final devices = state.devices;
             if (devices.isEmpty) {
               return const Center(child: Text('No devices found.'));
-            }
-            if (fakeDevices.isEmpty) {
-              fakeDevices = devices.map((_) => FakeDevice()).toList();
             }
             return LayoutBuilder(
               builder: (context, constraints) {
@@ -69,8 +64,7 @@ class _DeviceListPageState extends State<DeviceListPage> {
                   itemCount: devices.length,
                   itemBuilder: (context, index) {
                     final device = devices[index];
-                    final fakeDevice = fakeDevices[index];
-                    return _buildDeviceCard(bloc, context, device, fakeDevice);
+                    return _buildDeviceCard(context, device);
                   },
                 );
               },
@@ -93,9 +87,10 @@ class FakeDevice {
   }
 }
 
-Widget _buildDeviceCard(
-    DeviceListBloc bloc, BuildContext context,
-    Device device, FakeDevice fakeDevice) {
+Widget _buildDeviceCard(BuildContext context, Device device) {
+  final bloc = BlocProvider.of<DeviceListBloc>(context);
+  bool isOn = false; // Local state for the switch
+
   return Card(
     elevation: 4,
     shadowColor: Colors.black.withValues(alpha: 0.1),
@@ -103,12 +98,15 @@ Widget _buildDeviceCard(
       borderRadius: BorderRadius.circular(16),
     ),
     child: InkWell(
-      onTap: () {
-        Navigator.of(context).push(
+      onTap: () async {
+        final result = await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => DeviceDetailPage(device: device),
           ),
         );
+        if (result == true) {
+          bloc.add(LoadDeviceList());
+        }
       },
       borderRadius: BorderRadius.circular(16),
       child: Container(
@@ -220,19 +218,23 @@ Widget _buildDeviceCard(
             const SizedBox(height: 8),
 
             // 假开关控制
-            Center(
-              child: Switch.adaptive( // 使用 adaptive 可以根据平台自适应样式
-                value: fakeDevice.isOn,
-                onChanged: (bool newValue) {
-                  if(device.isOnline) {  // 在线设备才能控制
-                    fakeDevice.toggle();
-                    bloc.add(LoadDeviceList());
-                  }
-                },
-                activeColor: Colors.blueAccent, // 开关开启时的颜色
-                inactiveThumbColor: Colors.grey, // 开关关闭时滑块的颜色
-                inactiveTrackColor: Colors.grey.withValues(alpha: 0.3), // 开关关闭时轨道的颜色
-              ),
+            StatefulBuilder(
+              builder: (context, setState) {
+                return Center(
+                  child: Switch.adaptive( // 使用 adaptive 可以根据平台自适应样式
+                    value: isOn,
+                    onChanged: (bool newValue) {
+                      if(device.isOnline) {  // 在线设备才能控制
+                        setState(() => isOn = newValue);
+                        // TODO: Actually control the device
+                      }
+                    },
+                    activeColor: Colors.blueAccent, // 开关开启时的颜色
+                    inactiveThumbColor: Colors.grey, // 开关关闭时滑块的颜色
+                    inactiveTrackColor: Colors.grey.withValues(alpha: 0.3), // 开关关闭时轨道的颜色
+                  ),
+                );
+              }
             ),
           ],
         ),

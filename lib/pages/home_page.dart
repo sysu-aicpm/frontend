@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home_app/bloc/auth/bloc.dart';
 import 'package:smart_home_app/bloc/auth/event.dart';
+import 'package:smart_home_app/bloc/auth/state.dart';
 import 'package:smart_home_app/flutter_chat_desktop/presentation/chat_screen.dart';
 import 'package:smart_home_app/pages/admin/device_group_list_page.dart';
 import 'package:smart_home_app/pages/admin/user_group_list_page.dart';
 import 'package:smart_home_app/pages/admin/user_list_page.dart';
 import 'package:smart_home_app/pages/device_list_page.dart';
+import 'package:smart_home_app/pages/login_page.dart';
 
 class HomePage extends StatefulWidget {
   final bool isStaff;
@@ -62,36 +64,46 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Image.asset(
-          'assets/images/aicpm.png',
-          height: 60,
-          fit: BoxFit.contain,
-        )),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () {
-              // Dispatch logout event
-              context.read<AuthBloc>().add(LogoutRequested());
-            },
-          ),
-        ],
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is Unauthenticated) {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const LoginPage()),
+            (route) => false,
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Center(child: Image.asset(
+            'assets/images/aicpm.png',
+            height: 60,
+            fit: BoxFit.contain,
+          )),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () {
+                // Dispatch logout event
+                context.read<AuthBloc>().add(LogoutRequested());
+              },
+            ),
+          ],
+        ),
+        body: _pages(widget.isStaff)[_currentIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: Colors.blue.shade900,
+          unselectedItemColor: Colors.blue.shade600,
+          backgroundColor: Colors.blue.shade200,
+          currentIndex:  _currentIndex,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          items: _items(widget.isStaff),
+        )
       ),
-      body: _pages(widget.isStaff)[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.blue.shade900,
-        unselectedItemColor: Colors.blue.shade600,
-        backgroundColor: Colors.blue.shade200,
-        currentIndex:  _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: _items(widget.isStaff),
-      )
     );
   }
 }
