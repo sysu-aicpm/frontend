@@ -84,12 +84,12 @@ class ApiClient {
       deviceInfo['name'] = name;
     }
     if (description != null) {
-      deviceInfo['name'] = description;
+      deviceInfo['description'] = description;
     }
     if (brand != null) {
-      deviceInfo['name'] = brand;
+      deviceInfo['brand'] = brand;
     }
-    return _dio.put('/devices/$deviceId/control', data: {
+    return _dio.put('/devices/$deviceId/', data: {
       "device_info": deviceInfo
     });
   }
@@ -105,12 +105,14 @@ class ApiClient {
     });
   }
   
-  Future<Response> syncDevice(num deviceId) {
-    return _dio.post('/devices/sync/');
+  Future<Response> syncDevice(List<Map<String, dynamic>> deviceData) {
+    return _dio.post('/devices/sync/', data: {
+      "device_data": deviceData
+    });
   }
   
-  Future<Response> discoverDevice(num deviceId) {
-    return _dio.post('/devices/discover/');
+  Future<Response> discoverDevice() {
+    return _dio.get('/devices/discover/');
   }
 
   // --------- Admin Management ---------
@@ -196,7 +198,7 @@ class ApiClient {
   Future<Response> updateUserGroupName(num userGroupId, String name, String? description) {
     var data = {'name': name};
     if (description != null) data['description'] = description;
-    return _dio.post('/user-groups/$userGroupId/', data: data);
+    return _dio.put('/user-groups/$userGroupId/', data: data);
   }
 
   Future<Response> addUserToUserGroup(num userGroupId, num userId) {
