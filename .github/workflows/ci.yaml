@@ -41,7 +41,7 @@ jobs:
       - name: Build artifacts
         run: flutter build linux --release
       - name: Download MCP Server
-        run: curl -o ./build/linux/x64/release/bundle/mcp_server ${{ env.MCP_SERVER_BIN }}_linux
+        run: curl -L -o ./build/linux/x64/release/bundle/mcp_server ${{ env.MCP_SERVER_BIN }}_linux
       - name: Package Release
         uses: thedoctor0/zip-release@master
         with:
@@ -93,7 +93,7 @@ jobs:
       - name: Build artifacts
         run: flutter build windows --release
       - name: Download MCP Server
-        run: curl -o ./build/windows/x64/runner/Release/mcp_server ${{ env.MCP_SERVER_BIN }}_win
+        run: curl -L -o ./build/windows/x64/runner/Release/mcp_server ${{ env.MCP_SERVER_BIN }}_win.exe
       - name: Package Release
         uses: thedoctor0/zip-release@master
         with:
@@ -126,7 +126,7 @@ jobs:
       # - name: Build artifacts
       #   run: flutter build macos --release
       # - name: Download MCP Server
-      #   run: curl -o ./build/macos/Build/Products/Release/mcp_server ${{ env.MCP_SERVER_BIN }}_mac
+      #   run: curl -L -o ./build/macos/Build/Products/Release/mcp_server ${{ env.MCP_SERVER_BIN }}_mac
       # - name: Package Release
       #   uses: thedoctor0/zip-release@master
       #   with:
