@@ -62,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Image.asset(
-                            'assets/aicpm.png',
+                            'assets/images/aicpm.png',
                             height: 100,
                             fit: BoxFit.contain,
                           ),

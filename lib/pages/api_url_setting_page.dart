@@ -138,6 +138,12 @@ class _ApiUrlSettingPageState extends State<ApiUrlSettingPage> {
                       : const Text('保存设置'),
                 ),
               ),
+              Spacer(),
+              Center(child: Image.asset(
+                'assets/images/taffy/13.png',
+                height: 200,
+                fit: BoxFit.contain,
+              )),
             ],
           ),
         ),

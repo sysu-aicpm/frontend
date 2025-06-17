@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Image.asset(
-                              'assets/aicpm.png',
+                              'assets/images/aicpm.png',
                               height: 120,
                               fit: BoxFit.contain,
                             ),

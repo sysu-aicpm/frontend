@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:smart_home_app/flutter_chat_desktop/presentation/settings_screen.dart';
 import 'package:smart_home_app/flutter_chat_desktop/providers/mcp_providers.dart';
 import 'package:smart_home_app/flutter_chat_desktop/providers/settings_providers.dart';
@@ -129,7 +130,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            const Text('Gemini Chat'),
             const Spacer(),
             McpConnectionCounter(connectedCount: connectedServerCount),
             const SizedBox(width: 8),
@@ -160,13 +160,41 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             child: ListView.builder(
               controller: _scrollController,
               padding: const EdgeInsets.all(8.0),
-              itemCount: messages.length,
+              itemCount: messages.length + 1,
               itemBuilder: (context, index) {
-                final message = messages[index];
-                return MessageBubble(
-                  message: message,
-                  serverConfigs: serverConfigs,
-                );
+                if (index == 0) {
+                  return Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            'assets/images/taffy/3.png',
+                            height: 100,
+                            fit: BoxFit.contain,
+                          ),
+                          MarkdownBody(
+                            data: "您好! 有什么需求都可以问我! 使用 MCP 功能请使用桌面版客户端!",
+                            selectable: true
+                          ),
+                        ]
+                      ),
+                    )
+                  );
+                } else {
+                  final message = messages[index - 1];
+                  return MessageBubble(
+                    message: message,
+                    serverConfigs: serverConfigs,
+                  );
+                }
               },
             ),
           ),

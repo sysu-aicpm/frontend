@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Image.asset(
-          'assets/aicpm.png',
+          'assets/images/aicpm.png',
           height: 60,
           fit: BoxFit.contain,
         )),
